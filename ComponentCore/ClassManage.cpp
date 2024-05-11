@@ -1,6 +1,7 @@
 #include "ClassManage.h"
 #include "ObjectFactory.h"
 #include "StringUtils.h"
+#include "ObjectClass.h"
 //inline static bool OnStartsWith(const std::string& value, const std::string& start, bool case_sensitive = true) 
 //{
 //    if (start.length() > value.length()) 
@@ -42,16 +43,19 @@
 //
 //}
 
-
-
-ClassManage::ClassManage()
+//ClassManage::ClassManage()
+//{
+//
+//}
+/************************************************************************************************************************/
+template <typename T_To, typename T_From>
+static inline std::unique_ptr<T_To> DynamicUniqueCast(std::unique_ptr<T_From> obj) 
 {
-
+    return std::unique_ptr<T_To>{dynamic_cast<T_To*>(obj.get()) ? dynamic_cast<T_To*>(obj.release()) : nullptr};
 }
-
+/************************************************************************************************************************/
 ClassManage& ClassManage::getDefaultClassManage() {
 	static ClassManage ret;
-	// populate ret
 	return ret;
 }
 
@@ -62,9 +66,9 @@ void ClassManage::registerClass(const std::string strClassName, std::unique_ptr<
     if (strClassName.empty())
         return;
     std::string strClass = StringUtils::getTypeName2WithDot(strClassName);
-    if (m_mapClassManage.find(strClass) != m_mapClassManage.end()) {
+    if (m_mapClassManage.find(strClass) != m_mapClassManage.end()) 
         return;
-    }
+
     m_mapClassManage.insert(std::make_pair(strClass, std::move(objFactory)));
 }
 
@@ -92,11 +96,36 @@ void ClassManage::unregisterClass(const std::string strClassName)
     if (strClassName.empty())
         return;
     std::string strClass = StringUtils::getTypeName2WithDot(strClassName);
-    m_mapClassManage.erase(strClass);
+    if(m_mapClassManage.find(strClass) != m_mapClassManage.end())
+        m_mapClassManage.erase(strClass);
 }
 
 void ClassManage::unregisterClass()
 {
     std::lock_guard<std::mutex> lock(internal_mutex_);
     m_mapClassManage.clear();
+}
+
+bool ClassManage::initLoadClass(const std::string& strClassName, const std::string strLable)
+{
+    bool fRet = false;
+    if (strClassName.empty() || strLable.empty())
+        return fRet;
+    std::unique_ptr<ObjectClass> obj = ClassManage::createObjectClass(strClassName);
+    if (m_mapClassLoad.empty() || m_mapClassLoad.find(strLable) == m_mapClassLoad.end())
+    {
+        m_mapClassLoad.insert(std::make_pair(strLable, DynamicUniqueCast<ObjectClass>(std::move(obj))));
+        fRet = true;
+    }
+    return fRet;
+}
+
+std::unique_ptr<ObjectClass> ClassManage::GetObjectPrtFromLoadClass(const std::string strLable)
+{
+    if (strLable.empty() || m_mapClassLoad.empty())
+        return nullptr;
+    auto prtClass = m_mapClassLoad.find(strLable);
+    if(prtClass == m_mapClassLoad.end())
+        return nullptr;
+    return std::move(prtClass->second);
 }

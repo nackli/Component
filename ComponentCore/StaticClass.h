@@ -2,6 +2,7 @@
 #include <string>
 #include "ObjectFactory.h"
 #include "ClassManage.h"
+#include "StringUtils.h"
 #ifndef WIN32
 #include <cxxabi.h>
 #endif
@@ -30,7 +31,7 @@ public:
         std::free(szDemangleName);
         return szDemangleName;
 #else
-        return typeid(Class).name();
+        return StringUtils::getTypeName2WithDot(typeid(Class).name());
 #endif
     }
 
@@ -40,5 +41,5 @@ public:
         return instance;
     }
 };
-
 #define REGISTER_RESOURCE(CLASSNAME)  static const auto& CLASSNAME##_registrar = StaticClassType<CLASSNAME>::get()
+//#define REGISTER_CLASS_NAME(CLASSNAME)  static const auto& CLASSNAME##_reg = StaticClassType<CLASSNAME>::get()

@@ -249,7 +249,7 @@ T StringUtils::getSplitData(const std::string& str, char chDelimiter, int iIndex
 	{
 		if (iIndex == -1)
 			iIndex = vectorT.size() - 1;
-		else if (iIndex < 0 && iIndex >= (int)vectorT.size())
+		else if (iIndex < 0 || iIndex >= (int)vectorT.size())
 			return T();
 		return vectorT[iIndex];
 	}

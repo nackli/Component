@@ -7,11 +7,13 @@
 #include <sstream>
 #include <iomanip> 
 #include <random>
-#pragma comment(lib,"../yaml-cpp/Debug/yaml-cppd.lib")
 #include "../ComponentCore/ClassManage.h"
 #include "../ComponentCore/StringUtils.h"
 #include "yaml-cpp/yaml.h"
+#include "ObjectClass.h"
 
+
+#pragma comment(lib,"./Debug/yaml-cppd.lib")
 std::string getTimeAsString(std::string strFormat, time_t theTime)
 {
     struct tm timeinfo = { 0 };
@@ -22,55 +24,49 @@ std::string getTimeAsString(std::string strFormat, time_t theTime)
     return os.str();
 
 }
-
+using Keys = std::vector<std::string>;
 static void OnLoadYml()
 {
-    YAML::Node config;
+    YAML::Node nodeConfigs;
     try {
-        config = YAML::LoadFile("./config.yml");
+        nodeConfigs = YAML::LoadFile("./config.yml");
     }
     catch (YAML::BadFile& e) {
         std::cout << "read error!" <<e.what()<< std::endl;
         return;
     }
-    YAML::NodeType::value type12 = config.Type();
-    YAML::NodeType::value type = config["Processors"].Type();
-    YAML::Node  stra = config["Processors"];
-    for (auto item : config)
+    YAML::NodeType::value typeConfig = nodeConfigs.Type();
+    Keys keyProcs = { "Processors", "Procs" };
+    YAML::NodeType::value typeProcess = nodeConfigs["Processors"].Type();
+    YAML::Node  nodeProcessors = nodeConfigs["Processors"];
+    for (auto item : nodeConfigs)
     {
-        std::cout << item.first << std::endl;
+        YAML::NodeType::value typeItem = nodeConfigs[item.first].Type();
+        std::cout << item.first << "=" << typeItem << std::endl;
     }
    
-    for (const auto& procNode : stra)
+    for (const auto& procNode : nodeProcessors)
     {
         YAML::NodeType::value atat = procNode["id"].Type();
         std::string str = procNode["name"].as<std::string>();
+        std::string str1 = procNode["class"].as<std::string>();
         int at = 0;
     }
-    YAML::NodeType::value at = stra.Type();
-    std::string strafe = stra.as<std::string>();
 }
 
 int main()
 {
-
-    auto pairKv = StringUtils::spiltKv("nhao = zhongguo = shanghang");
-
-    auto strExit = StringUtils::spiltLast("nhao");
-    //OnLoadYml();
-    std::string strTest = "xg.nanjing.CTestObj.txt";
-    std::string std = StringUtils::getSplitData<std::string>(strTest, '.',4);
     ::LoadLibrary(_T("ComDllTest.dll"));
     ::LoadLibrary(_T("TestDll.dll"));
-   // if (hTest)
-    //{
-    char sz = '0';
-    char sz1 = 'a';
-    char sz2 = 'A';
-        std::unique_ptr<ObjectClass> obj = ClassManage::createObjectClass("xg.nanjing.CTestObj");
-        if(obj)
+    //if (hTest)
+    {
+        ClassManage::getDefaultClassManage().initLoadClass("xg.nanjing.CTestObj", "nihaonizainali");
+        std::unique_ptr<ObjectClass> obj = ClassManage::getDefaultClassManage().GetObjectPrtFromLoadClass("nihaonizainali");
+        if (obj)
             obj->initObject();
-    //}
+    }
+    OnLoadYml();
+
     std::cout << "Hello World!\n";
    
 }
