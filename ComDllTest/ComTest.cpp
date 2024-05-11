@@ -14,4 +14,4 @@ bool ComTest::initObject()
 	return true;
 }
 
-REGISTER_RESOURCE(ComTest);
+REG_CLASS_RES(ComTest);

@@ -9,66 +9,29 @@
 #include <random>
 #include "../ComponentCore/ClassManage.h"
 #include "../ComponentCore/StringUtils.h"
-#include "yaml-cpp/yaml.h"
+#include "../ComponentCore/YamlStructCpp.h"
 #include "ObjectClass.h"
 
-
-#pragma comment(lib,"./Debug/yaml-cppd.lib")
-std::string getTimeAsString(std::string strFormat, time_t theTime)
-{
-    struct tm timeinfo = { 0 };
-    localtime_s(&timeinfo , &theTime);
-
-    std::ostringstream os;
-    os << std::put_time(&timeinfo, strFormat.c_str());
-    return os.str();
-
-}
-using Keys = std::vector<std::string>;
-static void OnLoadYml()
-{
-    YAML::Node nodeConfigs;
-    try {
-        nodeConfigs = YAML::LoadFile("./config.yml");
-    }
-    catch (YAML::BadFile& e) {
-        std::cout << "read error!" <<e.what()<< std::endl;
-        return;
-    }
-    YAML::NodeType::value typeConfig = nodeConfigs.Type();
-    Keys keyProcs = { "Processors", "Procs" };
-    YAML::NodeType::value typeProcess = nodeConfigs["Processors"].Type();
-    YAML::Node  nodeProcessors = nodeConfigs["Processors"];
-    for (auto item : nodeConfigs)
-    {
-        YAML::NodeType::value typeItem = nodeConfigs[item.first].Type();
-        std::cout << item.first << "=" << typeItem << std::endl;
-    }
-   
-    for (const auto& procNode : nodeProcessors)
-    {
-        YAML::NodeType::value atat = procNode["id"].Type();
-        std::string str = procNode["name"].as<std::string>();
-        std::string str1 = procNode["class"].as<std::string>();
-        int at = 0;
-    }
-}
 
 int main()
 {
     ::LoadLibrary(_T("ComDllTest.dll"));
     ::LoadLibrary(_T("TestDll.dll"));
-    //if (hTest)
-    {
-        ClassManage::getDefaultClassManage().initLoadClass("xg.nanjing.CTestObj", "nihaonizainali");
-        std::unique_ptr<ObjectClass> obj = ClassManage::getDefaultClassManage().GetObjectPrtFromLoadClass("nihaonizainali");
-        if (obj)
-            obj->initObject();
-    }
-    OnLoadYml();
+
+    YamlStructCpp yamlLoad;
+    yamlLoad.loadYamlData("./config.yml");
+
+    std::unique_ptr<ObjectClass> obj = ClassManage::getDefaultClassManage().GetObjectPrtFromLoadClass("66e99f30-a866-3aa6-0000-000000000000");
+    if (obj)
+        obj->initObject();
+
+
+    std::unique_ptr<ObjectClass> obj1 = ClassManage::getDefaultClassManage().GetObjectPrtFromLoadClass("44e88fd0-a833-3ee6-0000-000000000000");
+    if (obj1)
+        obj1->initObject();
 
     std::cout << "Hello World!\n";
-   
+    system("pause");
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单

@@ -15,4 +15,4 @@ bool CTestClass::initObject()
 	return true;
 }
 
-REGISTER_RESOURCE(CTestClass);
+REG_CLASS_RES(CTestClass);

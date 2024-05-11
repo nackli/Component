@@ -1,6 +1,7 @@
 #include "CTestObj.h"
 #include "StaticClass.h"
 #include "StringUtils.h"
+#include <iostream>
 namespace xg {
 	namespace nanjing {
 		CTestObj::CTestObj()
@@ -15,9 +16,11 @@ namespace xg {
 		bool CTestObj::initObject()
 		{
 			std::string str = getClassType();
+			std::cout << str << std::endl;
+
 			return true;
 		}
 
-		REGISTER_RESOURCE(CTestObj);
+		REG_CLASS_RES(CTestObj);
 	}
 }

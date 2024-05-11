@@ -41,5 +41,4 @@ public:
         return instance;
     }
 };
-#define REGISTER_RESOURCE(CLASSNAME)  static const auto& CLASSNAME##_registrar = StaticClassType<CLASSNAME>::get()
-//#define REGISTER_CLASS_NAME(CLASSNAME)  static const auto& CLASSNAME##_reg = StaticClassType<CLASSNAME>::get()
+#define REG_CLASS_RES(CLASS_NAME)  static const auto& CLASS_NAME##_registrar = StaticClassType<CLASS_NAME>::get()

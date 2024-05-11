@@ -59,7 +59,6 @@ ClassManage& ClassManage::getDefaultClassManage() {
 	return ret;
 }
 
-
 void ClassManage::registerClass(const std::string strClassName, std::unique_ptr<ObjectFactory> objFactory)
 {
     std::lock_guard<std::mutex> lock(internal_mutex_);

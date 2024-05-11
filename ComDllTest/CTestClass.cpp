@@ -1,5 +1,6 @@
 #include "CTestClass.h"
 #include "StaticClass.h"
+#include <iostream>
 namespace xg {
 	namespace nack {
 		CTestClass::CTestClass()
@@ -13,9 +14,11 @@ namespace xg {
 
 		bool CTestClass::initObject()
 		{
+			std::string str = getClassType();
+			std::cout << str << std::endl;
 			return true;
 		}
 
-		REGISTER_RESOURCE(CTestClass);
+		REG_CLASS_RES(CTestClass);
 	}
 }
