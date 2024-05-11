@@ -1,0 +1,9 @@
+Component Config Version: 12
+Classes:
+- id: 44e88fd0-a833-3ee6-0000-000000000000
+  name: GetModbusTCP
+  class: org.apache.nifi.minifi.processors.GetModbusTCP
+  Properties:
+    Config File: C:/minifi-cpp/modbus.json
+    Time Window Ms: 1000
+    Freq: 100  
