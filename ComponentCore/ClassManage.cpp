@@ -105,14 +105,16 @@ void ClassManage::unregisterClass()
     m_mapClassManage.clear();
 }
 
-bool ClassManage::initLoadClass(const std::string& strClassName, const std::string strLable)
+bool ClassManage::initLoadClass(const std::string& strClassName, const std::string strLable, std::string strObjectName)
 {
     bool fRet = false;
     if (strClassName.empty() || strLable.empty())
         return fRet;
     std::unique_ptr<ObjectClass> obj = ClassManage::createObjectClass(strClassName);
-    if (m_mapClassLoad.empty() || m_mapClassLoad.find(strLable) == m_mapClassLoad.end())
+    if (obj && (m_mapClassLoad.empty() || m_mapClassLoad.find(strLable) == m_mapClassLoad.end()))
     {
+        if(!strObjectName.empty())
+            obj->setObjectName(strObjectName);
         m_mapClassLoad.insert(std::make_pair(strLable, DynamicUniqueCast<ObjectClass>(std::move(obj))));
         fRet = true;
     }

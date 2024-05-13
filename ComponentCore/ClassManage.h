@@ -18,7 +18,7 @@ public:
 
 	void unregisterClass(const std::string strClassName);
 
-	bool initLoadClass(const std::string& strClassName, const std::string strLable);
+	bool initLoadClass(const std::string& strClassName, const std::string strLable,std::string strObjectName = std::string());
 
 	std::unique_ptr<ObjectClass> GetObjectPrtFromLoadClass(const std::string strLable);
 private:

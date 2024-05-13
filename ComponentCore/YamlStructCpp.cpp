@@ -2,6 +2,37 @@
 #include <iostream>
 #pragma comment(lib,"yaml-cppd.lib")
 #include "ClassManage.h"
+
+
+struct SchemaLable
+{
+    using Key = const char *;
+    Key strHead;
+    Key strRootGrop;
+
+    Key strClasses;
+    Key strObjectId;
+    Key strObjectName;
+    Key strClassName;
+    Key strProperties;
+
+    static SchemaLable getDefault();
+};
+
+SchemaLable SchemaLable::getDefault()
+{
+    struct SchemaLable schemaLable;
+    schemaLable.strHead = "Flow Controller";
+    schemaLable.strRootGrop = ".";
+
+    schemaLable.strClasses = "Classes";
+    schemaLable.strObjectId = "objectId";
+    schemaLable.strObjectName = "objectName";
+    schemaLable.strClassName = "className";
+    schemaLable.strProperties = "Properties";
+    return schemaLable;
+}
+
 YamlStructCpp::YamlStructCpp()
 {
 }
@@ -16,7 +47,7 @@ bool YamlStructCpp::loadYamlData(const std::string strFilePath)
 		return false;
     YAML::Node nodeConfigs;
     try {
-        nodeConfigs = YAML::LoadFile("./config.yml");
+        nodeConfigs = YAML::LoadFile(strFilePath);
     }
     catch (YAML::BadFile& e) {
         std::cout << "read error!" << e.what() << std::endl;
@@ -24,7 +55,7 @@ bool YamlStructCpp::loadYamlData(const std::string strFilePath)
     }
     //YAML::NodeType::value typeConfig = nodeConfigs.Type();
     //YAML::NodeType::value typeProcess = nodeConfigs["Classes"].Type();
-    YAML::Node  nodeClasses = nodeConfigs["Classes"];
+    YAML::Node  nodeClasses = nodeConfigs[SchemaLable::getDefault().strClasses];
     //for (auto item : nodeConfigs)
     //{
     //    YAML::NodeType::value typeItem = nodeConfigs[item.first].Type();
@@ -42,6 +73,14 @@ static bool OnGetNodeValue(YAML::Node nodeClasses, std::string& strValue)
     return true;
 }
 
+//static bool OnGetNodeValue(YAML::Node nodeClasses, std::string& strValue)
+//{
+//    if (nodeClasses.IsNull() || !nodeClasses.IsScalar())
+//        return false;
+//    strValue = nodeClasses.Scalar();
+//    return true;
+//}
+
 static bool OnGetNodeValue(YAML::Node nodeClasses, int& iValue)
 {
     if (nodeClasses.IsNull() || !nodeClasses.IsScalar())
@@ -54,13 +93,15 @@ bool YamlStructCpp::parseClassConfig(YAML::Node& nodeClasses)
 {
     if (nodeClasses.IsNull() || !nodeClasses.IsSequence())
         return false;
-    for (const auto& procNode : nodeClasses)
+    for (const auto& nodeClass : nodeClasses)
     {
         std::string strId;
         std::string strClass;
-        OnGetNodeValue(procNode["id"], strId);
-        OnGetNodeValue(procNode["class"], strClass);
-        ClassManage::getDefaultClassManage().initLoadClass(strClass, strId);
+        std::string strObjectName;
+        OnGetNodeValue(nodeClass[SchemaLable::getDefault().strObjectId], strId);
+        OnGetNodeValue(nodeClass[SchemaLable::getDefault().strObjectName], strObjectName);
+        OnGetNodeValue(nodeClass[SchemaLable::getDefault().strClassName], strClass);
+        ClassManage::getDefaultClassManage().initLoadClass(strClass, strId, strObjectName);
     }
 
     return true;

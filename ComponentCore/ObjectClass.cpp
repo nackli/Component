@@ -1,7 +1,7 @@
 #include "ObjectClass.h"
 #include <typeinfo>
 #include "StringUtils.h"
-ObjectClass::ObjectClass()
+ObjectClass::ObjectClass() :m_strObjectName()
 {
 
 }
@@ -24,7 +24,15 @@ std::string ObjectClass::getClassType()
 #endif
 }
 
-const std::string ObjectClass::getGeneratorId() const
+bool ObjectClass::setObjectName(const std::string strObjectName)
 {
-    return StringUtils::generateUUID();
+    if (strObjectName.empty())
+        return false;
+    m_strObjectName = strObjectName;
+    return true;
+}
+
+std::string ObjectClass::getObjectName()
+{
+    return m_strObjectName;
 }
