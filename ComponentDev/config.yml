@@ -1,15 +1,15 @@
 Component Config Version: 12
 Classes:
-- id: 44e88fd0-a833-3ee6-0000-000000000000
-  name: GetModbusTCP
-  class: xg.nack.CTestClass
+- objectId: 44e88fd0-a833-3ee6-0000-000000000000
+  objectName: GetModbusTCP
+  className: xg.nack.CTestClass
   Properties:
     Config File: C:/minifi-cpp/modbus.json
     Time Window Ms: 1000
     Freq: 100  
-- id: 66e99f30-a866-3aa6-0000-000000000000
-  name: SetModbusTCP
-  class: xg.nanjing.CTestObj
+- objectId: 66e99f30-a866-3aa6-0000-000000000000
+  objectName: SetModbusTCP
+  className: xg.nanjing.CTestObj
   Properties:
     Config File: C:/minifi-cpp/test.json
     Time Window Ms: 200
