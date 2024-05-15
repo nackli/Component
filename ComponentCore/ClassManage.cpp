@@ -61,7 +61,7 @@ ClassManage& ClassManage::getDefaultClassManage() {
 
 void ClassManage::registerClass(const std::string strClassName, std::unique_ptr<ObjectFactory> objFactory)
 {
-    std::lock_guard<std::mutex> lock(internal_mutex_);
+    std::lock_guard<std::mutex> lock(m_mutexUnternal);
     if (strClassName.empty())
         return;
     std::string strClass = StringUtils::getTypeName2WithDot(strClassName);
@@ -73,7 +73,7 @@ void ClassManage::registerClass(const std::string strClassName, std::unique_ptr<
 
 std::unique_ptr<ObjectClass> ClassManage::CreateObject(std::string strClassName)
 {
-    std::lock_guard<std::mutex> lock(internal_mutex_);
+    std::lock_guard<std::mutex> lock(m_mutexUnternal);
     if (strClassName.empty())
         return nullptr;
     std::string strClass = StringUtils::getTypeName2WithDot(strClassName);
@@ -91,7 +91,7 @@ std::unique_ptr<ObjectClass> ClassManage::createObjectClass(std::string strClass
 
 void ClassManage::unregisterClass(const std::string strClassName)
 {
-    std::lock_guard<std::mutex> lock(internal_mutex_);
+    std::lock_guard<std::mutex> lock(m_mutexUnternal);
     if (strClassName.empty())
         return;
     std::string strClass = StringUtils::getTypeName2WithDot(strClassName);
@@ -101,11 +101,13 @@ void ClassManage::unregisterClass(const std::string strClassName)
 
 void ClassManage::unregisterClass()
 {
-    std::lock_guard<std::mutex> lock(internal_mutex_);
+    std::lock_guard<std::mutex> lock(m_mutexUnternal);
     m_mapClassManage.clear();
 }
 
-bool ClassManage::initLoadClass(const std::string& strClassName, const std::string strLable, std::string strObjectName)
+bool ClassManage::initLoadClass(const std::string& strClassName,
+    const std::string strLable,
+    const std::string strObjectName)
 {
     bool fRet = false;
     if (strClassName.empty() || strLable.empty())

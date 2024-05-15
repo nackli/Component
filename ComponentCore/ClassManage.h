@@ -18,7 +18,7 @@ public:
 
 	void unregisterClass(const std::string strClassName);
 
-	bool initLoadClass(const std::string& strClassName, const std::string strLable,std::string strObjectName = std::string());
+	bool initLoadClass(const std::string& strClassName, const std::string strLable, const std::string strObjectName = std::string());
 
 	std::unique_ptr<ObjectClass> GetObjectPrtFromLoadClass(const std::string strLable);
 private:
@@ -30,7 +30,7 @@ private:
 protected:
 	std::map<std::string, std::unique_ptr<ObjectFactory>> m_mapClassManage;
 	std::map<std::string, std::unique_ptr<ObjectClass>> m_mapClassLoad;
-	mutable std::mutex internal_mutex_;
+	mutable std::mutex m_mutexUnternal;
 
 };
 

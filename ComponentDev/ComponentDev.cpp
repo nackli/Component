@@ -11,10 +11,32 @@
 #include "../ComponentCore/StringUtils.h"
 #include "../ComponentCore/YamlStructCpp.h"
 #include "ObjectClass.h"
+#include "Value.h"
+#include <string>
 
 
 int main()
 {
+    Value valueStr("afhafaniwhfo");
+    if (valueStr != "afhafaniwh")
+    {
+        Value tet;
+        int ma = sizeof(tet);
+        const char * p1 = tet.getValue("aaa");
+        Value val("aaaa");
+        const char* p = valueStr.getValue("abc");
+        Value temp = valueStr + val + "1234567" + "908746" + "000000" + "122222";
+ 
+        Value valDouble(150);
+        Value temp1 = valDouble + 123 + 9.1456;
+        Value va = Value(12) / Value(2);
+        //temp1 -= 2;
+        int afa = 0;    
+    }
+    else
+    {
+        int b = 0;
+    }
     ::LoadLibrary(_T("ComDllTest.dll"));
     ::LoadLibrary(_T("TestDll.dll"));
 

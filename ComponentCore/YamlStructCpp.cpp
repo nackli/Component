@@ -89,6 +89,20 @@ static bool OnGetNodeValue(YAML::Node nodeClasses, int& iValue)
     return true;
 }
 
+static bool OnGetNodeValue(YAML::Node nodeItem, std::map<std::string,std::string> &mapProperty)
+{
+    if (nodeItem.IsNull() || !nodeItem.IsMap())
+        return false;
+    for (auto item : nodeItem)
+    {
+        YAML::NodeType::value typeItem = nodeItem[item.first].Type();
+        if(nodeItem[item.first].IsScalar())
+            mapProperty.insert(std::make_pair(item.first.as<std::string>(), item.second.as<std::string>()));
+        std::cout << item.first << "=" << typeItem << std::endl;
+    }
+    return true;
+}
+
 bool YamlStructCpp::parseClassConfig(YAML::Node& nodeClasses)
 {
     if (nodeClasses.IsNull() || !nodeClasses.IsSequence())
@@ -98,9 +112,11 @@ bool YamlStructCpp::parseClassConfig(YAML::Node& nodeClasses)
         std::string strId;
         std::string strClass;
         std::string strObjectName;
+        std::map<std::string, std::string> mapProperty;
         OnGetNodeValue(nodeClass[SchemaLable::getDefault().strObjectId], strId);
         OnGetNodeValue(nodeClass[SchemaLable::getDefault().strObjectName], strObjectName);
         OnGetNodeValue(nodeClass[SchemaLable::getDefault().strClassName], strClass);
+        OnGetNodeValue(nodeClass[SchemaLable::getDefault().strProperties], mapProperty);
         ClassManage::getDefaultClassManage().initLoadClass(strClass, strId, strObjectName);
     }
 
