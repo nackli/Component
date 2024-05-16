@@ -6,7 +6,8 @@ Copyright (c) 2024. All Rights Reserved.
 #include "ObjectClass.h"
 #include <typeinfo>
 #include "StringUtils.h"
-ObjectClass::ObjectClass() :m_strObjectName()
+#include "Properties.h"
+ObjectClass::ObjectClass() :m_strObjectName(), m_pProp(NULL)
 {
 
 }
@@ -38,4 +39,14 @@ bool ObjectClass::setObjectName(const std::string strObjectName)
 std::string ObjectClass::getObjectName()
 {
     return m_strObjectName;
+}
+
+void ObjectClass::addPropertiesPtr(std::shared_ptr<Properties> pProp)
+{
+    m_pProp = pProp;
+}
+
+std::shared_ptr<Properties> ObjectClass::getProperties()
+{
+    return m_pProp;
 }

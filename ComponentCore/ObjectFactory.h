@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <memory>
-#include "ObjectClass.h"
+class ObjectClass;
 class ObjectFactory {
 public:
     ObjectFactory() {};
@@ -12,7 +12,7 @@ public:
     virtual ~ObjectFactory() = default;
 
 
-    virtual std::unique_ptr<ObjectClass> createObject()
+    virtual std::shared_ptr<ObjectClass> createObject()
     {
         return nullptr;
     }
@@ -28,8 +28,8 @@ public:
     virtual ~ObjectFactoryDef() = default;
 
 
-    virtual std::unique_ptr<ObjectClass> createObject() override
+    virtual std::shared_ptr<ObjectClass> createObject() override
     {
-        return std::make_unique<T>();
+        return std::make_shared<T>();
     }
 };

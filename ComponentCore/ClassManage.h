@@ -3,14 +3,15 @@
 #include <string>
 #include <memory>
 #include <mutex>
-#include "ObjectClass.h"
 #include "ObjectFactory.h"
+class ObjectClass;
+class Properties;
 class ClassManage
 {
 public:
 	static ClassManage& getDefaultClassManage();
 
-	static std::unique_ptr<ObjectClass> createObjectClass(std::string strClassName);
+	static std::shared_ptr<ObjectClass> createObjectClass(std::string strClassName);
 
 	void registerClass(const std::string strClassName, std::unique_ptr<ObjectFactory> objFactory);
 
@@ -18,18 +19,20 @@ public:
 
 	void unregisterClass(const std::string strClassName);
 
-	bool initLoadClass(const std::string& strClassName, const std::string strLable, const std::string strObjectName = std::string());
+	bool insertClass(const std::string&, const std::string&, const std::string&, std::shared_ptr<Properties>);
 
-	std::unique_ptr<ObjectClass> GetObjectPrtFromLoadClass(const std::string strLable);
+	std::shared_ptr<ObjectClass> GetObjectPrtFromLoadClass(const std::string strLable);
+
+	bool initClassInfo();
 private:
-	std::unique_ptr<ObjectClass> CreateObject(std::string strClassName);
+	std::shared_ptr<ObjectClass> CreateObject(std::string strClassName);
 	ClassManage() {};
 	ClassManage(const ClassManage&) = delete;
 	ClassManage(const ClassManage&&) = delete;;
 	ClassManage& operator=(const ClassManage&) = delete;;
 protected:
 	std::map<std::string, std::unique_ptr<ObjectFactory>> m_mapClassManage;
-	std::map<std::string, std::unique_ptr<ObjectClass>> m_mapClassLoad;
+	std::map<std::string, std::shared_ptr<ObjectClass>> m_mapClassLoad;
 	mutable std::mutex m_mutexUnternal;
 
 };

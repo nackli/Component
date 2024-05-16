@@ -23,8 +23,8 @@ template <typename R,typename T>
 static const std::map<std::string, std::function<R(T, T)>>  g_mapOperateFun = {
 	{"==",          [](T leftNum, T rightNum)->R { return leftNum == rightNum; } },
 	{"!=",          [](T leftNum, T rightNum)->R { return leftNum == rightNum; } },
-	{"<",			[](T leftNum, T rightNum)->R { return leftNum > rightNum; } },
-	{">",           [](T leftNum, T rightNum)->R { return leftNum < rightNum; } },
+	{"<",			[](T leftNum, T rightNum)->R { return leftNum < rightNum; } },
+	{">",           [](T leftNum, T rightNum)->R { return leftNum > rightNum; } },
 	{"<=",          [](T leftNum, T rightNum)->R { return leftNum <= rightNum; } },
 	{">=",          [](T leftNum, T rightNum)->R { return leftNum >= rightNum; } },
 	{"+",			[](T leftNum, T rightNum)->R { return (R)(leftNum + rightNum); } },
@@ -54,6 +54,18 @@ static bool OnIsSameType(std::type_index type1, std::type_index type2,bool bDoub
 	return false;
 }
 
+static inline bool str2Number(std::string strData, uint64_t& uData)
+{
+	bool fRet = false;
+	if (strData.empty())
+		return fRet;
+	char* pEnd = NULL;
+	uData = strtoul(strData.c_str(), &pEnd, 10);
+	if (*pEnd != 0)
+		return false;
+	return true;
+}
+
 static inline uint64_t OnGetValue(std::type_index typeIndex, uint64_t uValue,
 	std::string strValue, uint64_t uDefalt)
 {
@@ -68,17 +80,6 @@ static inline uint64_t OnGetValue(std::type_index typeIndex, uint64_t uValue,
 	return uDefalt;
 }
 
-static inline bool str2Number(std::string strData, uint64_t& uData)
-{
-	bool fRet = false;
-	if (strData.empty())
-		return fRet;
-	char* pEnd = NULL;
-	uData = strtoul(strData.c_str(), &pEnd, 10);
-	if (*pEnd != 0)
-		return false;
-	return true;
-}
 
 static inline bool str2Real(std::string strData, double& dData)
 {
@@ -207,6 +208,7 @@ double Value::getValue(double uDefalt)
 
 Value& Value::operator=(Value value)
 {
+	m_typeId = std::move(value.m_typeId);
 	if (m_typeId != STRING_TYPE)
 	{
 		m_strValue.clear();
@@ -217,7 +219,6 @@ Value& Value::operator=(Value value)
 		m_objValue = ValueHolder();
 		m_strValue = std::move(value.m_strValue);
 	}
-	m_typeId = std::move(value.m_typeId);
 	return *this;
 }
 
@@ -315,7 +316,7 @@ bool Value::cmpValueFun(const Value& valueParam, std::string strOpr)
 	return false;
 }
 
-bool Value::operator==(std::string strValue)
+bool Value::operator==(const std::string strValue)
 {
 	return *this == Value(strValue);
 }
@@ -330,32 +331,32 @@ bool Value::operator==(const char* szValue)
 	return *this == Value(szValue);
 }
 
-bool Value::operator==(uint64_t uValue)
+bool Value::operator==(const uint64_t uValue)
 {
 	return *this == Value(uValue);
 }
 
-bool Value::operator==(int64_t uValue)
+bool Value::operator==(const int64_t uValue)
 {
 	return *this == Value(uValue);
 }
 
-bool Value::operator==(uint32_t uValue)
+bool Value::operator==(const uint32_t uValue)
 {
 	return *this == Value(uValue);
 }
 
-bool Value::operator==(int uValue)
+bool Value::operator==(const int uValue)
 {
 	return *this == Value(uValue);
 }
 
-bool Value::operator==(bool uValue)
+bool Value::operator==(const bool uValue)
 {
 	return *this == Value(uValue);
 }
 
-bool Value::operator==(double uValue)
+bool Value::operator==(const double uValue)
 {
 	return *this == Value(uValue);
 }
@@ -365,7 +366,7 @@ bool Value::operator!=(const Value valueParam)
 	return !(*this == valueParam);
 }
 
-bool Value::operator!=(std::string strValue)
+bool Value::operator!=(const std::string strValue)
 {
 	return *this != Value(strValue);
 }
@@ -380,32 +381,32 @@ bool Value::operator!=(const char* szValue)
 	return *this != Value(szValue);
 }
 
-bool Value::operator!=(uint64_t uValue)
+bool Value::operator!=(const uint64_t uValue)
 {
 	return *this != Value(uValue);
 }
 
-bool Value::operator!=(int64_t iValue)
+bool Value::operator!=(const int64_t iValue)
 {
 	return *this != Value(iValue);
 }
 
-bool Value::operator!=(uint32_t uValue)
+bool Value::operator!=(const uint32_t uValue)
 {
 	return *this != Value(uValue);
 }
 
-bool Value::operator!=(int uValue)
+bool Value::operator!=(const int uValue)
 {
 	return *this != Value(uValue);
 }
 
-bool Value::operator!=(bool bValue)
+bool Value::operator!=(const bool bValue)
 {
 	return *this != Value(bValue);
 }
 
-bool Value::operator!=(double dValue)
+bool Value::operator!=(const double dValue)
 {
 	return *this != Value(dValue);
 }
@@ -415,7 +416,7 @@ bool Value::operator<(const Value valueParam)
 	return cmpValueFun(valueParam, "<");
 }
 
-bool Value::operator<(std::string strValue)
+bool Value::operator<(const std::string strValue)
 {
 	return *this < Value(strValue);
 }
@@ -430,27 +431,27 @@ bool Value::operator<(const char* szValue)
 	return *this < Value(szValue);
 }
 
-bool Value::operator<(uint64_t uValue)
+bool Value::operator<(const uint64_t uValue)
 {
 	return *this < Value(uValue);
 }
 
-bool Value::operator<(int64_t uValue)
+bool Value::operator<(const int64_t uValue)
 {
 	return *this < Value(uValue);
 }
 
-bool Value::operator<(uint32_t uValue)
+bool Value::operator<(const uint32_t uValue)
 {
 	return *this < Value(uValue);
 }
 
-bool Value::operator<(int uValue)
+bool Value::operator<(const int uValue)
 {
 	return *this < Value(uValue);
 }
 
-bool Value::operator<(double uValue)
+bool Value::operator<(const double uValue)
 {
 	return *this < Value(uValue);
 }
@@ -460,7 +461,7 @@ bool Value::operator<=(const Value valueParam)
 	return cmpValueFun(valueParam, "<=");
 }
 
-bool Value::operator<=(std::string strValue)
+bool Value::operator<=(const std::string strValue)
 {
 	return *this <= Value(strValue);
 }
@@ -475,27 +476,27 @@ bool Value::operator<=(const char* szValue)
 	return *this <= Value(szValue);
 }
 
-bool Value::operator<=(uint64_t uValue)
+bool Value::operator<=(const uint64_t uValue)
 {
 	return *this <= Value(uValue);
 }
 
-bool Value::operator<=(int64_t uValue)
+bool Value::operator<=(const int64_t uValue)
 {
 	return *this <= Value(uValue);
 }
 
-bool Value::operator<=(uint32_t uValue)
+bool Value::operator<=(const uint32_t uValue)
 {
 	return *this <= Value(uValue);
 }
 
-bool Value::operator<=(int uValue)
+bool Value::operator<=(const int uValue)
 {
 	return *this <= Value(uValue);
 }
 
-bool Value::operator<=(double uValue)
+bool Value::operator<=(const double uValue)
 {
 	return *this <= Value(uValue);
 }
@@ -505,7 +506,7 @@ bool Value::operator>(const Value valueParam)
 	return cmpValueFun(valueParam, ">");
 }
 
-bool Value::operator>(std::string strValue)
+bool Value::operator>(const std::string strValue)
 {
 	return *this > Value(strValue);
 }
@@ -520,28 +521,28 @@ bool Value::operator>(const char* szValue)
 	return *this > Value(szValue);
 }
 
-bool Value::operator>(uint64_t uValue)
+bool Value::operator>(const uint64_t uValue)
 {
 	return *this > Value(uValue);
 }
 
-bool Value::operator>(int64_t uValue)
+bool Value::operator>(const int64_t uValue)
 {
 	return *this > Value(uValue);
 }
 
-bool Value::operator>(uint32_t uValue)
+bool Value::operator>(const uint32_t uValue)
 {
 	return *this > Value(uValue);
 }
 
-bool Value::operator>(int uValue)
+bool Value::operator>(const int uValue)
 {
 	return *this > Value(uValue);
 }
 
 
-bool Value::operator>(double uValue)
+bool Value::operator>(const double uValue)
 {
 	return *this > Value(uValue);
 }
@@ -551,7 +552,7 @@ bool Value::operator>=(const Value& valueParam)
 	return cmpValueFun(valueParam, ">=");
 }
 
-bool Value::operator>=(std::string strValue)
+bool Value::operator>=(const std::string strValue)
 {
 	return *this >= Value(strValue);
 }
@@ -566,27 +567,27 @@ bool Value::operator>=(const char* szValue)
 	return *this >= Value(szValue);
 }
 
-bool Value::operator>=(uint64_t uValue)
+bool Value::operator>=(const uint64_t uValue)
 {
 	return *this >= Value(uValue);
 }
 
-bool Value::operator>=(int64_t uValue)
+bool Value::operator>=(const int64_t uValue)
 {
 	return *this >= Value(uValue);
 }
 
-bool Value::operator>=(uint32_t uValue)
+bool Value::operator>=(const uint32_t uValue)
 {
 	return *this >= Value(uValue);
 }
 
-bool Value::operator>=(int uValue)
+bool Value::operator>=(const int uValue)
 {
 	return *this >= Value(uValue);
 }
 
-bool Value::operator>=(double uValue)
+bool Value::operator>=(const double uValue)
 {
 	return *this >= Value(uValue);
 }

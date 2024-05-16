@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include <memory>
+class Properties;
 class ObjectClass {
 public:
 	ObjectClass();
@@ -14,6 +16,11 @@ public:
 
 	std::string getObjectName();
 
+	void addPropertiesPtr(std::shared_ptr<Properties> pProp);
+
+	std::shared_ptr<Properties> getProperties();
+
 private:
 	std::string m_strObjectName;
+	std::shared_ptr<Properties> m_pProp;
 };

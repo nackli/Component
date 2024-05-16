@@ -17,41 +17,12 @@
 
 int main()
 {
-    Value valueStr("afhafaniwhfo");
-    if (valueStr != "afhafaniwh")
-    {
-        Value tet;
-        int ma = sizeof(tet);
-        auto p1 = tet.getValue("aaa");
-        Value val("001234567");
-        auto p = valueStr.getValue("abc");
-        Value temp = valueStr + val + "1234567" + "908746" + "000000" + "122222";
- 
-        Value valDouble(150);
-        auto szTest = val.getValue(0);
-        Value temp1 = valDouble + 123 + 9.1456;
-        Value va = Value(12) / Value(2);
-        //temp1 -= 2;
-        int afa = 0;    
-    }
-    else
-    {
-        int b = 0;
-    }
+
     ::LoadLibrary(_T("ComDllTest.dll"));
     ::LoadLibrary(_T("TestDll.dll"));
 
     YamlStructCpp yamlLoad;
     yamlLoad.loadYamlData("./config.yml");
-
-    std::unique_ptr<ObjectClass> obj = ClassManage::getDefaultClassManage().GetObjectPrtFromLoadClass("66e99f30-a866-3aa6-0000-000000000000");
-    if (obj)
-        obj->initObject();
-
-
-    std::unique_ptr<ObjectClass> obj1 = ClassManage::getDefaultClassManage().GetObjectPrtFromLoadClass("44e88fd0-a833-3ee6-0000-000000000000");
-    if (obj1)
-        obj1->initObject();
 
     std::cout << "Hello World!\n";
     system("pause");
