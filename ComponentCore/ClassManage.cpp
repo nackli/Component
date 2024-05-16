@@ -1,3 +1,8 @@
+/*
+Written by Nack li <nackli@163.com>
+Copyright (c) 2024. All Rights Reserved.
+*/
+
 #include "ClassManage.h"
 #include "ObjectFactory.h"
 #include "StringUtils.h"

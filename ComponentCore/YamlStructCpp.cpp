@@ -1,8 +1,12 @@
+/*
+Written by Nack li <nackli@163.com>
+Copyright (c) 2024. All Rights Reserved.
+*/
+
 #include "YamlStructCpp.h"
 #include <iostream>
 #pragma comment(lib,"yaml-cppd.lib")
 #include "ClassManage.h"
-
 
 struct SchemaLable
 {
