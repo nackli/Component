@@ -28,8 +28,8 @@ public:
 
 	//param is default value
 	std::string getValue(std::string );
-	char * getValue(char *);
-	const char* getValue(const char*);
+	std::string  getValue(char *);
+	std::string  getValue(const char*);
 	uint64_t getValue(uint64_t );
 	int64_t getValue(int64_t );
 	uint32_t getValue(uint32_t );

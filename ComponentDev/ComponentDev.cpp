@@ -22,12 +22,13 @@ int main()
     {
         Value tet;
         int ma = sizeof(tet);
-        const char * p1 = tet.getValue("aaa");
-        Value val("aaaa");
-        const char* p = valueStr.getValue("abc");
+        auto p1 = tet.getValue("aaa");
+        Value val("001234567");
+        auto p = valueStr.getValue("abc");
         Value temp = valueStr + val + "1234567" + "908746" + "000000" + "122222";
  
         Value valDouble(150);
+        auto szTest = val.getValue(0);
         Value temp1 = valDouble + 123 + 9.1456;
         Value va = Value(12) / Value(2);
         //temp1 -= 2;

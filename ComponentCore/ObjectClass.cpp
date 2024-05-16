@@ -26,8 +26,6 @@ std::string ObjectClass::getClassType()
 
 bool ObjectClass::setObjectName(const std::string strObjectName)
 {
-    if (strObjectName.empty())
-        return false;
     m_strObjectName = strObjectName;
     return true;
 }

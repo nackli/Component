@@ -14,24 +14,19 @@ static const std::type_index BOOL_TYPE = std::type_index(typeid(bool));
 static const std::type_index REAL_TYPE = std::type_index(typeid(double));
 static const std::type_index NULL_UNKOWN = STRING_TYPE;
 /**********************************************************************************************/
-template < typename T>
-static const std::map<std::string, std::function<bool(T, T)>>  g_mapCmpFun = {
-	{"==",          [](T leftNum, T rightNum)->bool { return leftNum == rightNum; } },
-	{"!=",          [](T leftNum, T rightNum)->bool { return leftNum == rightNum; } },
-	{"<",			[](T leftNum, T rightNum)->bool { return leftNum > rightNum; } },
-	{">",           [](T leftNum, T rightNum)->bool { return leftNum < rightNum; } },
-	{"<=",          [](T leftNum, T rightNum)->bool { return leftNum <= rightNum; } },
-	{">=",          [](T leftNum, T rightNum)->bool { return leftNum >= rightNum; } }
-};
-
 template <typename R,typename T>
-static const std::map<std::string, std::function<R(T, T)>>  g_mapCalcFun = {
+static const std::map<std::string, std::function<R(T, T)>>  g_mapOperateFun = {
+	{"==",          [](T leftNum, T rightNum)->R { return leftNum == rightNum; } },
+	{"!=",          [](T leftNum, T rightNum)->R { return leftNum == rightNum; } },
+	{"<",			[](T leftNum, T rightNum)->R { return leftNum > rightNum; } },
+	{">",           [](T leftNum, T rightNum)->R { return leftNum < rightNum; } },
+	{"<=",          [](T leftNum, T rightNum)->R { return leftNum <= rightNum; } },
+	{">=",          [](T leftNum, T rightNum)->R { return leftNum >= rightNum; } },
 	{"+",			[](T leftNum, T rightNum)->R { return (R)(leftNum + rightNum); } },
 	{"-",			[](T leftNum, T rightNum)->R { return (R)(leftNum - rightNum); } },
 	{"*",			[](T leftNum, T rightNum)->R { return (R)(leftNum * rightNum); } },
 	{"/",           [](T leftNum, T rightNum)->R { return (R)(leftNum / rightNum); } }
 };
-
 
 static bool OnIsSameType(std::type_index type1, std::type_index type2,bool bDouble = false)
 {
@@ -52,6 +47,44 @@ static bool OnIsSameType(std::type_index type1, std::type_index type2,bool bDoub
 		return false;
 	}
 	return false;
+}
+
+static inline uint64_t OnGetValue(std::type_index typeIndex, uint64_t uValue,
+	std::string strValue, uint64_t uDefalt)
+{
+	if (OnIsSameType(typeIndex, UINT64_TYPE))
+		return uValue;
+	else if (typeIndex == STRING_TYPE)
+	{
+		uint64_t uRet = 0;
+		if (str2Number(strValue, uRet))
+			return uRet;
+	}
+	return uDefalt;
+}
+
+static inline bool str2Number(std::string strData, uint64_t& uData)
+{
+	bool fRet = false;
+	if (strData.empty())
+		return fRet;
+	char* pEnd = NULL;
+	uData = strtoul(strData.c_str(), &pEnd, 10);
+	if (*pEnd != 0)
+		return false;
+	return true;
+}
+
+static inline bool str2Real(std::string strData, double& dData)
+{
+	bool fRet = false;
+	if (strData.empty())
+		return fRet;
+	char* pEnd = NULL;
+	dData = strtod(strData.c_str(), &pEnd);
+	if (*pEnd != 0)
+		return false;
+	return true;
 }
 /**********************************************************************************************/
 Value::Value() :m_objValue(), m_typeId(NULL_UNKOWN), m_strValue()
@@ -108,53 +141,47 @@ std::string Value::getValue(std::string uDefalt)
 {
 	if (m_typeId == STRING_TYPE && !m_strValue.empty())
 		return m_strValue;
-	return uDefalt;
+	else if (OnIsSameType(m_typeId, UINT64_TYPE))
+		return std::move(std::to_string(this->m_objValue.uValue64));
+	else if (m_typeId == REAL_TYPE)
+		return std::move(std::to_string(this->m_objValue.dValue));
+	return std::move(uDefalt);
 }
 
-char* Value::getValue(char* szDefalt)
+std::string Value::getValue(char* szDefalt)
 {
-	if (m_typeId == STRING_TYPE && !m_strValue.empty())
-		return (char *)m_strValue.c_str();
-	return szDefalt;
+	return getValue(std::string(szDefalt));
 }
 
-const char* Value::getValue(const char* szDefalt)
+std::string Value::getValue(const char* szDefalt)
 {
-	if (m_typeId == STRING_TYPE && !m_strValue.empty())
-		return m_strValue.c_str();
-	return szDefalt;
+	return getValue(std::string(szDefalt));
 }
 
 uint64_t Value::getValue(uint64_t uDefalt) 
 {
-	if (OnIsSameType(m_typeId, UINT64_TYPE))
-		return m_objValue.uValue64;
-	return uDefalt;
+	return OnGetValue(m_typeId, m_objValue.uValue64, m_strValue, uDefalt);
 }
 
 int64_t Value::getValue(int64_t uDefalt)
 {
-	if (OnIsSameType(m_typeId, UINT64_TYPE))
-		return m_objValue.iValue64;
-	return uDefalt;
+	return (int64_t)OnGetValue(m_typeId, (uint64_t)m_objValue.iValue64, m_strValue, (uint64_t)uDefalt);
 }
 
 uint32_t Value::getValue(uint32_t uDefalt)
 {
-	if (OnIsSameType(m_typeId, UINT64_TYPE))
-		return m_objValue.uValue32;
-	return uDefalt;
+	return (uint32_t)OnGetValue(m_typeId, (uint64_t)m_objValue.uValue32, m_strValue, (uint64_t)uDefalt);
 }
 
 int Value::getValue(int uDefalt)
 {
-	if (OnIsSameType(m_typeId, UINT64_TYPE))
-		return m_objValue.iValue;
-	return uDefalt;
+	return (int)OnGetValue(m_typeId, (uint64_t)m_objValue.iValue, m_strValue, (uint64_t)uDefalt);;
 }
 bool Value::getValue(bool uDefalt)
 {
 	if (m_typeId == BOOL_TYPE)
+		return m_objValue.bValue;
+	else if (OnIsSameType(m_typeId, UINT64_TYPE))
 		return m_objValue.bValue;
 	return uDefalt;
 }
@@ -162,6 +189,14 @@ double Value::getValue(double uDefalt)
 {
 	if (m_typeId == REAL_TYPE)
 		return m_objValue.dValue;
+	else if(OnIsSameType(m_typeId, UINT64_TYPE))
+		return (double)m_objValue.uValue64;
+	else if (m_typeId == STRING_TYPE)
+	{
+		double dValue = 0;
+		if (str2Real(m_strValue, dValue))
+			return dValue;
+	}
 	return uDefalt;
 }
 
@@ -260,7 +295,7 @@ bool Value::cmpValueFun(const Value& valueParam, std::string strOpr)
 		else if (m_typeId == REAL_TYPE)
 		{
 			const double eps = 1e-6;
-			auto funOpr = g_mapCmpFun<double>.at(strOpr);
+			auto funOpr = g_mapOperateFun<bool,double>.at(strOpr);
 			if (strOpr == "==")
 				return funOpr(fabs(valueParam.m_objValue.dValue - m_objValue.dValue), eps);
 			else
@@ -268,7 +303,7 @@ bool Value::cmpValueFun(const Value& valueParam, std::string strOpr)
 		}
 		else
 		{
-			auto funOpr = g_mapCmpFun<uint64_t>.at(strOpr);
+			auto funOpr = g_mapOperateFun<bool, uint64_t>.at(strOpr);
 			return funOpr(m_objValue.uValue64, valueParam.m_objValue.uValue64);
 		}
 	}
@@ -562,27 +597,25 @@ Value Value::calcValueFun(const Value& vParam, std::string strOpr)
 			//auto funOpr = g_mapCalcFun<std::string, std::string>.at(strOpr);
 			vTempRet.m_strValue = m_strValue + vParam.m_strValue;
 		}
-
 		else if (m_typeId == REAL_TYPE && vParam.m_typeId == REAL_TYPE)
 		{
-			auto funOpr = g_mapCalcFun<double, double>.at(strOpr);
+			auto funOpr = g_mapOperateFun<double, double>.at(strOpr);
 			vTempRet.m_objValue.dValue = funOpr(m_objValue.dValue, vParam.m_objValue.dValue);
 		}
 		else if (m_typeId == REAL_TYPE && vParam.m_typeId != REAL_TYPE)
 		{
-			auto funOpr = g_mapCalcFun<double, double>.at(strOpr);
+			auto funOpr = g_mapOperateFun<double, double>.at(strOpr);
 			vTempRet.m_objValue.dValue = funOpr(m_objValue.dValue, (double)vParam.m_objValue.uValue64);
 		}
-
 		else if (m_typeId != REAL_TYPE && vParam.m_typeId == REAL_TYPE)
 		{
-			auto funOpr = g_mapCalcFun<double, double>.at(strOpr);
+			auto funOpr = g_mapOperateFun<double, double>.at(strOpr);
 			vTempRet.m_objValue.dValue = funOpr((double)m_objValue.uValue64, vParam.m_objValue.dValue);
 			vTempRet.m_typeId = REAL_TYPE;
 		}
 		else
 		{
-			auto funOpr = g_mapCalcFun<uint64_t, uint64_t>.at(strOpr);
+			auto funOpr = g_mapOperateFun<uint64_t, uint64_t>.at(strOpr);
 			vTempRet.m_objValue.uValue64 = funOpr(m_objValue.uValue64, vParam.m_objValue.uValue64);
 		}
 
@@ -594,7 +627,6 @@ Value Value::operator+(Value vParam)
 {
 	return calcValueFun(vParam, "+");
 }
-
 
 Value Value::operator+(std::string strValue)
 {
