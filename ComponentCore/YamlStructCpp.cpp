@@ -6,7 +6,7 @@ Copyright (c) 2024. All Rights Reserved.
 #include "YamlStructCpp.h"
 #include <iostream>
 #include "yaml-cpp/yaml.h"
-#pragma comment(lib,"yaml-cppd.lib")
+//#pragma comment(lib,"yaml-cppd.lib")
 #include "ClassManage.h"
 #include "Value.h"
 #include "Properties.h"
