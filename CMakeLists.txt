@@ -55,7 +55,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}")
 include(ExternalProject)
 #include(BundledYamlCpp)
 #use_bundled_yamlcpp(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
-
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "CompentDev")
 # add sub project
 add_subdirectory(ComponentCore)
 if(ENABLE_TEST)
