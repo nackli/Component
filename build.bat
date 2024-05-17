@@ -46,12 +46,8 @@ if %errorlevel%==0 (
 
 
 :build_success
-cd ..
-pause
 exit /b 0
 
 
 :exit_build
-cd ..
-pause
 exit /b 1
