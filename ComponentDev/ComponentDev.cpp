@@ -7,9 +7,9 @@
 #include <sstream>
 #include <iomanip> 
 #include <random>
-#include "../ComponentCore/ClassManage.h"
-#include "../ComponentCore/StringUtils.h"
-#include "../ComponentCore/YamlStructCpp.h"
+#include "ClassManage.h"
+#include "StringUtils.h"
+#include "YamlStructCpp.h"
 #include "ObjectClass.h"
 #include "Value.h"
 #include <string>

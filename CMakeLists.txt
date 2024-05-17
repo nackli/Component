@@ -4,9 +4,7 @@ cmake_minimum_required(VERSION 3.16)
 project(ComponentDev VERSION 1.0.0 LANGUAGES CXX)
 
 # set C++ standard
-set(CMAKE_C_FLAGS "-m32")
-set(CMAKE_CXX_FLAGS "-m32")
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -28,7 +26,7 @@ macro(add_msvc_options target)
     /Zc:__cplusplus    # 启用正确的 __cplusplus 宏值
     /Zc:inline         # 移除未使用的函数
     /Gm-               # 禁用最小生成（minimal rebuild）
-    /EHsc              # 指定异常处理模型
+    #/EHsc              # 指定异常处理模型
     )
   endif()
 endmacro()

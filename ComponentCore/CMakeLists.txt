@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.16)
 
 #project(ComponentDev VERSION 0.14.0)
-include_directories(../yaml-cpp-src/include)
+include_directories(../yaml-cpp-src/include ./inc)
 link_directories(../yaml-cpp-src/build/)
-file(GLOB DEV_SOURCES "*.cpp")
+
+file(GLOB DEV_SOURCES "src/*.cpp")
 
 if(WIN32)
     set(EXECUTABLE_FILE_NAME "ComponentCore.dll")

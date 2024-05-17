@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 #project(ComponentDev VERSION 0.14.0)
-include_directories(../ComponentCore)
+include_directories(../ComponentCore/inc)
 #link_directories(${CMAKE_BINARY_DIR})
 
 file(GLOB DEV_SOURCES "*.cpp")
@@ -8,12 +8,14 @@ file(GLOB DEV_SOURCES "*.cpp")
 if(WIN32)
     set(EXECUTABLE_FILE_NAME "ComDllTest.dll")
     set(EXECUTABLE_FILE_DESCRIPTION "${PRODUCT_NAME} agent")
+
 endif()
 
 
 add_library(ComDllTest SHARED ${DEV_SOURCES})
 target_link_libraries(ComDllTest ComponentCore)
 
+set_target_properties(ComDllTest PROPERTIES COMPILE_FLAGS "/EHsc")
 set_target_properties(ComDllTest PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
 set_target_properties(ComDllTest PROPERTIES OUTPUT_NAME ComDllTest)
 set_target_properties(ComDllTest PROPERTIES ENABLE_EXPORTS True)
