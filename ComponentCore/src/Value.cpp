@@ -8,6 +8,9 @@ Copyright (c) 2024. All Rights Reserved.
 #include<map>
 #include <algorithm>
 #include <functional>
+#ifndef  Win32
+#include <math.h>
+#endif
 #define FREE_MEM(x) if((x)){free((x));(x) =nullptr;}
 
 static const std::type_index UINT64_TYPE = std::type_index(typeid(uint64_t));
@@ -148,9 +151,9 @@ std::string Value::getValue(std::string uDefalt)
 	if (m_typeId == STRING_TYPE && !m_strValue.empty())
 		return m_strValue;
 	else if (OnIsSameType(m_typeId, UINT64_TYPE))
-		return std::move(std::to_string(this->m_objValue.uValue64));
+		return std::to_string(this->m_objValue.uValue64);
 	else if (m_typeId == REAL_TYPE)
-		return std::move(std::to_string(this->m_objValue.dValue));
+		return std::to_string(this->m_objValue.dValue);
 	return std::move(uDefalt);
 }
 

@@ -2,8 +2,12 @@
 //
 
 #include <iostream>
+#ifdef WIN32
 #include <Windows.h>
 #include <tchar.h>
+#else
+#include <dlfcn.h> 
+#endif
 #include <sstream>
 #include <iomanip> 
 #include <random>
@@ -17,10 +21,23 @@
 
 int main()
 {
-
+#if WIN32
     ::LoadLibrary(_T("ComDllTest.dll"));
     ::LoadLibrary(_T("TestDll.dll"));
-
+#else
+    void *handle = dlopen("./ComDllTest/libComDllTest.so", RTLD_NOW | RTLD_GLOBAL);
+    if (!handle) 
+    {  
+            fprintf (stderr, "%s ", dlerror());  
+            exit(1);  
+    }  
+    void *hTest = dlopen("./TestDll/libTestDll.so", RTLD_NOW | RTLD_GLOBAL);
+    if (!hTest) 
+    {  
+            fprintf (stderr, "%s ", dlerror());  
+            exit(1);  
+    }   
+#endif
     YamlStructCpp yamlLoad;
     yamlLoad.loadYamlData("./config.yml");
 

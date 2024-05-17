@@ -76,9 +76,17 @@ std::string &StringUtils::trim(std::string& strInput, const std::string  strTrim
 bool StringUtils::equals(const char * szLeft, const char *szRight,bool bCaseSensitive)
 {
     if (bCaseSensitive)
+#ifdef WIN32    
         return std::strcmp(szLeft, szRight) == 0;
+#else
+        return strcmp(szLeft, szRight) == 0;
+#endif
     else
+#ifdef WIN32    
         return _strcmpi(szLeft, szRight) == 0;
+#else
+        return strcasecmp(szLeft, szRight) == 0;
+#endif 
     return false;
 }
 
@@ -436,7 +444,12 @@ std::string StringUtils::time2String(const std::string strFormat, const time_t t
         iTime = time(&iTime);
 
     struct tm timeinfo = { 0 };
+#ifdef WIN32 
     localtime_s(&timeinfo, &iTime);
+#else
+    struct tm *pTm  = localtime(&iTime);
+    memcpy(&timeinfo, pTm, sizeof(timeinfo));
+#endif 
 
     std::ostringstream os;
     os << std::put_time(&timeinfo, strFormat.c_str());
@@ -488,6 +501,7 @@ std::string StringUtils::UnicodeToANSI(const std::wstring& wstr)
     std::mbstate_t state = {};
     size_t uRetValue = 0;
     const wchar_t* src = wstr.data();
+#ifdef WIN32
     errno_t errNo = wcsrtombs_s(&uRetValue, nullptr, 0, &src, wstr.length(), &state);
     if (!errNo)
     {
@@ -498,6 +512,18 @@ std::string StringUtils::UnicodeToANSI(const std::wstring& wstr)
         if (!errNo)
             ret.assign(buff.get(), uRetValue);
     }
+#else
+    // int errNo = wcsrtombs(&uRetValue, nullptr, 0, &src, wstr.length(), &state);
+    // if (!errNo)
+    // {
+    //     uRetValue += 1;
+    //     std::unique_ptr< char[] > buff(new char[uRetValue]);
+    //     errNo = wcsrtombs(&uRetValue, buff.get(), uRetValue , &src, uRetValue, &state);
+
+    //     if (!errNo)
+    //         ret.assign(buff.get(), uRetValue);
+    // }
+#endif    
     return ret;
 }
 
@@ -507,6 +533,7 @@ std::wstring StringUtils::ANSIToUnicode(const std::string& str)
     std::mbstate_t state = {};
     size_t uRetValue = 0;
     const char* src = str.data();
+#ifdef WIN32    
     errno_t errNo = mbsrtowcs_s(&uRetValue, nullptr, 0, &src, str.length(), &state);
     if (!errNo)
     {
@@ -517,6 +544,7 @@ std::wstring StringUtils::ANSIToUnicode(const std::string& str)
         if (!errNo)
             ret.assign(buff.get(), uRetValue);
     }
+#endif
     return ret;
 }
 

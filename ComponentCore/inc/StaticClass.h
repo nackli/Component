@@ -5,6 +5,7 @@
 #include "StringUtils.h"
 #ifndef WIN32
 #include <cxxabi.h>
+#include <memory>
 #endif
 template<typename Class>
 class StaticClassType {
@@ -27,9 +28,10 @@ public:
         char* szDemangleName = abi::__cxa_demangle(typeid(Class).name(), NULL, NULL, NULL);
         if (szDemangleName == nullptr)
             return {};
-        std::string strTypeame = szDemangleName;
+        std::string strTypeame = std::string(szDemangleName);
         std::free(szDemangleName);
-        return szDemangleName;
+        szDemangleName= nullptr;
+        return strTypeame;
 #else
         return StringUtils::getTypeName2WithDot(typeid(Class).name());
 #endif

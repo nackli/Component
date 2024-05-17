@@ -71,7 +71,7 @@ static inline bool OnGetNodeValue(YAML::Node nodeItem, Properties::MapStr2Value&
         YAML::NodeType::value typeItem = nodeItem[item.first].Type();
         if (nodeItem[item.first].IsScalar())
             mapProperty.insert(std::make_pair(item.first.as<std::string>(), Value(item.second.as<std::string>())));
-        std::cout << item.first << "=" << typeItem << std::endl;
+        //std::cout << item.first << "=" << typeItem << std::endl;
     }
     return true;
 }

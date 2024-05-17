@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <string.h>
 class StringUtils
 {
 public:
@@ -121,13 +122,21 @@ std::string StringUtils::transFomat(const std::string& str)
 template<> inline
 const char* StringUtils::transFomat(const std::string& str)
 {
+#ifdef WIN32	
 	return _strdup(str.c_str());//free
+#else
+	return strdup(str.c_str());//free
+#endif
 }
 
 template<> inline
 char* StringUtils::transFomat(const std::string& str)
 {
+#ifdef WIN32	
 	return _strdup(str.c_str());//free
+#else
+	return strdup(str.c_str());//free
+#endif
 }
 
 template < typename T>
@@ -156,7 +165,12 @@ T StringUtils::getEnv(const char* name, T defaultVal)
 {
 	char* szValue = nullptr;
 	size_t sz = 0;
+#ifdef Win32		
 	if (_dupenv_s(&szValue, &sz, name) != 0 || !szValue)
+#else
+	szValue = getenv(name);
+	if (!szValue)
+#endif	
 		return defaultVal;
 	std::string strValue = std::string();
 	

@@ -4,9 +4,11 @@ cmake_minimum_required(VERSION 3.16)
 project(ComponentDev VERSION 1.0.0 LANGUAGES CXX)
 
 # set C++ standard
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_BINARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)
+
 if(MSVC)
 	set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "" FORCE)
 	#runtime library
@@ -21,7 +23,11 @@ if(MSVC)
 
 # generate zero_check
 #set(CMAKE_SUPPRESS_REGENERATION FALSE)
+else()
+	set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -I${CMAKE_CURRENT_SOURCE_DIR}/include/ -Wall -O2 -fPIC -DUNIVERSAL -g")
+	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${CMAKE_CURRENT_SOURCE_DIR}/include/ -Wall -O2 -fPIC -DUNIVERSAL -g")
 endif()	
+
 # default user option
 option(ENABLE_TEST "Enable test" ON)
 
