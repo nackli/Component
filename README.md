@@ -13,6 +13,9 @@
  代码说明
  
  ComponentCore 文件夹下主要是内核程序，主要进行YML解析，字符串处理，通用数据类型，以及动态加载等c++代码
+ 
  ComponentDev 文件夹主要是主应用程序，主要处理动态库的加载，以及config文件
+ 
  TestDll 测试文件夹
+ 
  ComDllTest 测试文件夹
