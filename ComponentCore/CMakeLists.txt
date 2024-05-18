@@ -1,21 +1,17 @@
 cmake_minimum_required(VERSION 3.16)
-
 #project(ComponentDev VERSION 0.14.0)
-include_directories(../yaml-cpp-src/include ./inc)
-if(MSVC)
-link_directories(../yaml-cpp-src/build/)
-else()
-link_directories(../yaml-cpp-src/build_linux/)
-endif()
+include_directories(./inc)
+
 
 file(GLOB DEV_SOURCES "src/*.cpp")
 
 if(MSVC)
     set(EXECUTABLE_FILE_NAME "ComponentCore.dll")
     set(EXECUTABLE_FILE_DESCRIPTION "${PRODUCT_NAME} agent")
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 endif()
 
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
 set(BUILD_SHARED_LIBS ON)
 #add_library(${DEV_SOURCES} ${RUNTIME_OUTPUT_DIRECTORY}/exports.def)
 

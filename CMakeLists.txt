@@ -2,30 +2,27 @@
 cmake_minimum_required(VERSION 3.16)
 # project name
 project(ComponentDev VERSION 1.0.0 LANGUAGES CXX)
-
+set(BUILD_NUMBER "" CACHE STRING "Build number")
 # set C++ standard
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_BINARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)
+set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "" FORCE)
 
 if(MSVC)
-	set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "" FORCE)
 	#runtime library
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MTd /Zi")
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT /Zi")
 
 	set(CMAKE_GENERATOR_PLATFORM Win32)
-
+  add_compile_options(/W3 /utf-8 /bigobj /MP)
 	#pdb 
 	#set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} /DEBUG /OPT:REF /OPT:ICF")
 	#set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /DEBUG /OPT:REF /OPT:ICF")
-
-# generate zero_check
-#set(CMAKE_SUPPRESS_REGENERATION FALSE)
 else()
-	set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -I${CMAKE_CURRENT_SOURCE_DIR}/include/ -Wall -O2 -fPIC -DUNIVERSAL -g")
-	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${CMAKE_CURRENT_SOURCE_DIR}/include/ -Wall -O2 -fPIC -DUNIVERSAL -g")
+	set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall -O2 -fPIC -g")
+	set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O2 -fPIC  -g")
 endif()	
 
 # default user option
@@ -72,16 +69,20 @@ endmacro()
 #set_target_properties(MyApp PROPERTIES LINK_FLAGS "/DELAYLOAD:libDynamic.dll")
 # yaml-cpp
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}")
+
 include(ExternalProject)
-#include(BundledYamlCpp)
-#use_bundled_yamlcpp(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "CompentDev")
+include(BundledYamlCpp)
+use_bundled_yamlcpp(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+
+if(MSVC)
+  set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "CompentDev")
+endif()
 # add sub project
-add_subdirectory(ComponentCore)
+ add_subdirectory(ComponentCore)
 if(ENABLE_TEST)
-add_subdirectory(ComDllTest)
-add_subdirectory(TestDll)
-add_subdirectory(ComponentDev)
+  add_subdirectory(ComDllTest)
+  add_subdirectory(TestDll)
+  add_subdirectory(ComponentDev)
 endif()
 
 

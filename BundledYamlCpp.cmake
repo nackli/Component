@@ -16,7 +16,6 @@
 # under the License.
 
 function(use_bundled_yamlcpp SOURCE_DIR BINARY_DIR)
-	message("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     if (WIN32)
         set(LIBDIR "lib")
     else()
@@ -25,8 +24,10 @@ function(use_bundled_yamlcpp SOURCE_DIR BINARY_DIR)
         list(GET LIBDIR_LIST 0 LIBDIR)
     endif()
 
+
+
     # Define byproducts
-    if (WIN32)
+    if (MSVC)
         set(BYPRODUCT "${LIBDIR}/yaml-cpp.lib")
     else()
         set(BYPRODUCT "${LIBDIR}/libyaml-cpp.a")
@@ -37,6 +38,7 @@ function(use_bundled_yamlcpp SOURCE_DIR BINARY_DIR)
             "-DCMAKE_INSTALL_PREFIX=${BINARY_DIR}/thirdparty/yaml-cpp-install"
             "-DCMAKE_DEBUG_POSTFIX="
             "-DBUILD_SHARED_LIBS=OFF"
+            "-DCMAKE_POSITION_INDEPENDENT_CODE=ON"
             "-DYAML_CPP_BUILD_TESTS=OFF"
             "-DYAML_CPP_BUILD_TOOLS=OFF")
 

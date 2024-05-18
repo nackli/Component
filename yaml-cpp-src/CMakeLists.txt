@@ -8,7 +8,6 @@ if(POLICY CMP0091)
 endif()
 
 project(YAML_CPP VERSION 0.7.0 LANGUAGES CXX)
-
 include(CMakePackageConfigHelpers)
 include(CMakeDependentOption)
 include(CheckCXXCompilerFlag)
