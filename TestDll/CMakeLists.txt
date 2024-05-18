@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
 #project(ComponentDev VERSION 0.14.0)
-include_directories(../ComponentCore/inc)
 #link_directories(${CMAKE_BINARY_DIR})
 file(GLOB DEV_SOURCES "*.cpp")
 

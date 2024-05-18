@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 3.16)
 #project(ComponentDev VERSION 0.14.0)
 include_directories(./inc)
 
+if (MSVC)
+set(COMCORE_LIB_PATH "${CMAKE_CURRENT_BINARY_DIR}/ComponentCore.lib")
+else()
+set(COMCORE_LIB_PATH "${CMAKE_CURRENT_BINARY_DIR}/ComponentCore")
+endif()
 
 file(GLOB DEV_SOURCES "src/*.cpp")
 
@@ -34,3 +39,8 @@ if (WIN32)
 else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-reorder")
 endif()
+
+set(COMCORE_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/inc" CACHE STRING "" FORCE)
+
+target_include_directories(ComponentCore INTERFACE ${COMCORE_INCLUDE_DIR})
+set_target_properties(ComponentCore PROPERTIES IMPORTED_LOCATION "${COMCORE_LIB_PATH}")

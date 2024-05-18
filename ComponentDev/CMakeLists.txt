@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
 
-include_directories(../ComponentCore/inc)
-
 file(GLOB DEV_SOURCES "*.cpp")
 
 if(MSVC)

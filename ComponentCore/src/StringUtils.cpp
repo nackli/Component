@@ -223,7 +223,7 @@ std::string StringUtils::getTypeName2WithDot(const std::string &strTypeName)
     else if (startsWith(strOlnyTypeName, strEnumPrefix))
         strOlnyTypeName = trimLeft(strOlnyTypeName, strClassPrefix);
     replaceAll(strOlnyTypeName, "::", ".");
-    return std::move(strOlnyTypeName);
+    return strOlnyTypeName;
 }
 
 std::string StringUtils::ascii2HexString(const std::string& strInput)
@@ -235,7 +235,7 @@ std::string StringUtils::ascii2HexString(const std::string& strInput)
     for (std::string::const_iterator it = strInput.begin(); it != strInput.end(); it++)
         strRetData += OnDigit2String<int>(*it, 16, 2);
 
-    return std::move(strRetData);
+    return strRetData;
 }
 
 std::string StringUtils::hexString2Ascii(const std::string& strInput)
@@ -381,7 +381,7 @@ std::string StringUtils::toBase64(const char* szByteData, unsigned int uLen)
 
     }
 
-    return std::move(ret);
+    return ret;
 }
 
 inline bool StringUtils::IsBase64(unsigned char c) {
@@ -432,7 +432,7 @@ std::string StringUtils::fromBase64(const std::string& strBase64)
             ret += char_array_3[j];
     }
 
-    return std::move(ret);
+    return ret;
 }
 
 std::string StringUtils::time2String(const std::string strFormat, const time_t theTime)
@@ -498,10 +498,10 @@ std::string StringUtils::UnicodeToUTF8(const std::wstring wstr)
 std::string StringUtils::UnicodeToANSI(const std::wstring& wstr)
 {
     std::string ret;
+#ifdef WIN32 
     std::mbstate_t state = {};
     size_t uRetValue = 0;
     const wchar_t* src = wstr.data();
-#ifdef WIN32
     errno_t errNo = wcsrtombs_s(&uRetValue, nullptr, 0, &src, wstr.length(), &state);
     if (!errNo)
     {
@@ -530,10 +530,10 @@ std::string StringUtils::UnicodeToANSI(const std::wstring& wstr)
 std::wstring StringUtils::ANSIToUnicode(const std::string& str)
 {
     std::wstring ret;
+ #ifdef WIN32       
     std::mbstate_t state = {};
     size_t uRetValue = 0;
     const char* src = str.data();
-#ifdef WIN32    
     errno_t errNo = mbsrtowcs_s(&uRetValue, nullptr, 0, &src, str.length(), &state);
     if (!errNo)
     {
@@ -570,5 +570,5 @@ std::string StringUtils::generateUUID()
     std::ostringstream oss;
     oss << /*std::uppercase <<*/ std::hex << part1 << part2;
     std::string strResult = str2UUIDFomat(std::move(oss.str()));
-    return strResult.substr(0, 36); // ½ØÈ¡36Î»×÷Îª¼ò»¯µÄUUID,ÒýÎÄÓÐ"-"·Ö¸î·û
+    return strResult.substr(0, 36); // ï¿½ï¿½È¡36Î»ï¿½ï¿½Îªï¿½ò»¯µï¿½UUID,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"-"ï¿½Ö¸ï¿½ï¿½
 }

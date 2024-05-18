@@ -1,4 +1,12 @@
-﻿// ComponentDev.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
+﻿/*
+ * @Author: nackli nackli@163.com
+ * @Date: 2024-05-17 22:53:14
+ * @LastEditors: nackli nackli@163.com
+ * @LastEditTime: 2024-05-18 16:11:29
+ * @FilePath: /Component/ComponentDev/ComponentDev.cpp
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ */
+// ComponentDev.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
 //
 
 #include <iostream>
@@ -21,7 +29,7 @@
 
 int main()
 {
-#if WIN32
+#ifdef WIN32
     ::LoadLibrary(_T("ComDllTest.dll"));
     ::LoadLibrary(_T("TestDll.dll"));
 #else
@@ -42,7 +50,9 @@ int main()
     yamlLoad.loadYamlData("./config.yml");
 
     std::cout << "Hello World!\n";
+#ifdef WIN32    
     system("pause");
+#endif
 }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
