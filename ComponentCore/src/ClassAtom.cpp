@@ -10,6 +10,9 @@ Copyright (c) 2024. All Rights Reserved.
 #ifndef WIN32
 #include <cxxabi.h>
 #endif
+/**
+ * @brief 
+*/
 ClassAtom::ClassAtom() :ObjectClass(), Properties()
 {
 

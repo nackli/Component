@@ -15,6 +15,16 @@ Copyright (c) 2024. All Rights Reserved.
 static const std::string g_strBase64Chars ="ABCDEFGHIJKLMNOPQRSTUVWXYZ""abcdefghijklmnopqrstuvwxyz""0123456789+/";
 /**************************************************************************************************************************************/
 template <typename T>
+/**
+ * @brief 
+ * @tparam T 
+ * @param tData 
+ * @param iBase 
+ * @param uWidth 
+ * @param chFill 
+ * @param iPrecision 
+ * @return 
+*/
 static std::string OnDigit2String(T tData, int iBase, unsigned char uWidth = 0, char chFill = '0', int iPrecision = 6)
 {
     std::ostringstream ss;
@@ -32,7 +42,11 @@ static std::string OnDigit2String(T tData, int iBase, unsigned char uWidth = 0, 
     ss << tData;
     return std::move(ss.str());
 }
-
+/**
+ * @brief 
+ * @param strUUID 
+ * @return 
+*/
 static std::string str2UUIDFomat(std::string strUUID)
 {
     if (strUUID.length() < 32)
@@ -47,10 +61,7 @@ static std::string str2UUIDFomat(std::string strUUID)
     strResult += strUUID.substr(20);
     return strResult;
 }
-
-
 /**************************************************************************************************************************************/
-
 std::string &StringUtils::trimLeft(std::string &strInput,const std::string strTrim)
 {
     if (strInput.empty() || strTrim.empty())
@@ -58,7 +69,12 @@ std::string &StringUtils::trimLeft(std::string &strInput,const std::string strTr
     strInput.erase(0, strInput.find_first_not_of(strTrim));
     return strInput;
 }
-
+/**
+ * @brief 
+ * @param strInput 
+ * @param strTrim 
+ * @return 
+*/
 std::string &StringUtils::trimRight(std::string &strInput, const std::string strTrim) 
 {
     //strInput.erase(std::find_if(strInput.rbegin(), strInput.rend(), [](unsigned char c) -> bool { return !isspace(c); }).base(), strInput.end());
@@ -67,12 +83,23 @@ std::string &StringUtils::trimRight(std::string &strInput, const std::string str
     strInput.erase(strInput.find_last_not_of(strTrim) + 1);
     return strInput;
 }
-
+/**
+ * @brief 
+ * @param strInput 
+ * @param strTrim 
+ * @return 
+*/
 std::string &StringUtils::trim(std::string& strInput, const std::string  strTrim)
 {
     return trimRight(trimLeft(strInput, strTrim), strTrim);
 }
-
+/**
+ * @brief 
+ * @param szLeft 
+ * @param szRight 
+ * @param bCaseSensitive 
+ * @return 
+*/
 bool StringUtils::equals(const char * szLeft, const char *szRight,bool bCaseSensitive)
 {
     if (bCaseSensitive)
@@ -89,22 +116,42 @@ bool StringUtils::equals(const char * szLeft, const char *szRight,bool bCaseSens
 #endif 
     return false;
 }
-
+/**
+ * @brief 
+ * @param strLeft 
+ * @param strRight 
+ * @param bCaseSensitive 
+ * @return 
+*/
 bool StringUtils::equals(const std::string& strLeft, const std::string& strRight, bool bCaseSensitive)
 {
     return equals(strLeft.c_str(), strRight.c_str(), bCaseSensitive);
 }
-
+/**
+ * @brief 
+ * @param str 
+ * @return 
+*/
 bool StringUtils::toLower(std::string &str)
 {
     return std::transform(str.begin(), str.end(), str.begin(), ::tolower) == str.end();
 }
-
+/**
+ * @brief 
+ * @param str 
+ * @return 
+*/
 bool StringUtils::toUpper(std::string &str)
 {
     return std::transform(str.begin(), str.end(), str.begin(), ::toupper) == str.end();
 }
-
+/**
+ * @brief 
+ * @param strValue 
+ * @param strStart 
+ * @param case_sensitive 
+ * @return 
+*/
 bool StringUtils::startsWith(const std::string strValue, const std::string strStart, bool case_sensitive)
 {
     if (strStart.length() > strValue.length())
@@ -115,7 +162,13 @@ bool StringUtils::startsWith(const std::string strValue, const std::string strSt
   
     return std::equal(strStart.begin(), strStart.end(), strValue.begin(), [](unsigned char lc, unsigned char rc) {return tolower(lc) == tolower(rc); });
 }
-
+/**
+ * @brief 
+ * @param strValue 
+ * @param strEnd 
+ * @param case_sensitive 
+ * @return 
+*/
 bool StringUtils::endsWith(const std::string strValue, const std::string strEnd, bool case_sensitive) {
     if (strEnd.length() > strValue.length() || strValue.empty() || strEnd.empty())
         return false;
@@ -125,7 +178,12 @@ bool StringUtils::endsWith(const std::string strValue, const std::string strEnd,
    
     return std::equal(strEnd.rbegin(), strEnd.rend(), strValue.rbegin(), [](unsigned char lc, unsigned char rc) {return tolower(lc) == tolower(rc); });
 }
-
+/**
+ * @brief 
+ * @param strInput 
+ * @param chDelimiter 
+ * @return 
+*/
 std::pair<std::string, std::string> StringUtils::spiltKv(const std::string strInput, char chDelimiter)
 {
     if (strInput.empty())
@@ -141,7 +199,12 @@ std::pair<std::string, std::string> StringUtils::spiltKv(const std::string strIn
     strValue = trim(strValue);
     return { strKey, strValue };
 }
-
+/**
+ * @brief 
+ * @param strInput 
+ * @param chDelimiter 
+ * @return 
+*/
 std::string StringUtils::spiltLast(const std::string strInput, char chDelimiter)
 {
     if (strInput.empty())
@@ -152,7 +215,11 @@ std::string StringUtils::spiltLast(const std::string strInput, char chDelimiter)
     std::string strExt = strInput.substr(uFirstEqualPos + 1);
     return std::move(trim(strExt));
 }
-
+/**
+ * @brief 
+ * @param strInput 
+ * @return 
+*/
 bool StringUtils::str2Bool(std::string strInput)
 {
     if (strInput.empty())
@@ -166,7 +233,13 @@ bool StringUtils::str2Bool(std::string strInput)
  
     return false;
 }
-
+/**
+ * @brief 
+ * @param strInput 
+ * @param strFrom 
+ * @param strTo 
+ * @return 
+*/
 bool StringUtils::replaceOne(std::string& strInput, const std::string& strFrom, const std::string& strTo) 
 {
     bool fRet = false;
@@ -181,7 +254,12 @@ bool StringUtils::replaceOne(std::string& strInput, const std::string& strFrom, 
         fRet = true;
     return fRet;
 }
-
+/**
+ * @brief 
+ * @param strSource 
+ * @param strFrom 
+ * @param strTo 
+*/
 void StringUtils::replaceAll(std::string& strSource, const std::string& strFrom, const std::string& strTo) 
 {
     if (strSource.empty() || strFrom.empty() || strTo.empty())
@@ -196,7 +274,13 @@ void StringUtils::replaceAll(std::string& strSource, const std::string& strFrom,
             loc++;
     }
 }
-
+/**
+ * @brief 
+ * @param strData 
+ * @param strFrom 
+ * @param strTo 
+ * @return 
+*/
 bool StringUtils::replaceLast(std::string& strData, const std::string& strFrom, const std::string& strTo)
 {
     if (strData.empty() || strFrom.empty() || strTo.empty())
@@ -207,7 +291,11 @@ bool StringUtils::replaceLast(std::string& strData, const std::string& strFrom, 
     strData.replace(start_pos, strFrom.length(), strTo);
     return true;
 }
-
+/**
+ * @brief 
+ * @param strTypeName 
+ * @return 
+*/
 std::string StringUtils::getTypeName2WithDot(const std::string &strTypeName)
 {
     const std::string strClassPrefix = "class ";
@@ -225,7 +313,11 @@ std::string StringUtils::getTypeName2WithDot(const std::string &strTypeName)
     replaceAll(strOlnyTypeName, "::", ".");
     return strOlnyTypeName;
 }
-
+/**
+ * @brief 
+ * @param strInput 
+ * @return 
+*/
 std::string StringUtils::ascii2HexString(const std::string& strInput)
 {
     if (strInput.empty())
@@ -237,7 +329,11 @@ std::string StringUtils::ascii2HexString(const std::string& strInput)
 
     return strRetData;
 }
-
+/**
+ * @brief 
+ * @param strInput 
+ * @return 
+*/
 std::string StringUtils::hexString2Ascii(const std::string& strInput)
 {
     if(strInput.empty())
@@ -255,86 +351,182 @@ std::string StringUtils::hexString2Ascii(const std::string& strInput)
 
     return std::move(ss.str());
 }
-
+/**
+ * @brief 
+ * @param iData 
+ * @param iBase 
+ * @param iWidth 
+ * @param chFill 
+ * @return 
+*/
 std::string StringUtils::digit2Str(int iData, const int iBase, const int iWidth, const char chFill)
 {
     return OnDigit2String<int>(iData, iBase, iWidth, chFill);
 }
-
+/**
+ * @brief 
+ * @param lData 
+ * @param iBase 
+ * @param iWidth 
+ * @param chFill 
+ * @return 
+*/
 std::string StringUtils::digit2Str(long lData, const int iBase, const int iWidth, const char chFill)
 {
     return OnDigit2String<long>(lData, iBase, iWidth, chFill);
 }
-
+/**
+ * @brief 
+ * @param lData 
+ * @param iBase 
+ * @param iWidth 
+ * @param chFill 
+ * @return 
+*/
 std::string StringUtils::digit2Str(unsigned int lData, const int iBase, const int iWidth, const char chFill)
 {
     return OnDigit2String<unsigned int>(lData, iBase, iWidth, chFill);
 }
+/**
+ * @brief 
+ * @param lData 
+ * @param iBase 
+ * @param iWidth 
+ * @param chFill 
+ * @return 
+*/
 std::string StringUtils::digit2Str(unsigned long lData, const int iBase, const int iWidth, const char chFill)
 {
     return OnDigit2String<unsigned long>(lData, iBase, iWidth, chFill);
 }
-
+/**
+ * @brief 
+ * @param lData 
+ * @param iBase 
+ * @param iWidth 
+ * @param chFill 
+ * @return 
+*/
 std::string StringUtils::digit2Str(long long lData, const int iBase, const int iWidth, const char chFill)
 {
     return OnDigit2String<long long>(lData, iBase, iWidth, chFill);
 }
-
+/**
+ * @brief 
+ * @param lData 
+ * @param iBase 
+ * @param iWidth 
+ * @param chFill 
+ * @return 
+*/
 std::string StringUtils::digit2Str(unsigned long long lData, const int iBase,  const int iWidth, const char chFill)
 {
     return OnDigit2String<unsigned long long>(lData, iBase, iWidth, chFill);
 }
-
+/**
+ * @brief 
+ * @param lData 
+ * @param iBase 
+ * @param iWidth 
+ * @param chFill 
+ * @param iPrecision 
+ * @return 
+*/
 std::string StringUtils::digit2Str(double lData, const int iBase, const int iWidth, const char chFill, const int iPrecision)
 {
     return OnDigit2String<double>(lData, iBase, iWidth, chFill, iPrecision);
 }
-
+/**
+ * @brief 
+ * @param lData 
+ * @param iBase 
+ * @param iWidth 
+ * @param chFill 
+ * @param iPrecision 
+ * @return 
+*/
 std::string StringUtils::digit2Str(float lData, const int iBase, const int iWidth, const char chFill,  const int iPrecision)
 {
     return OnDigit2String<float>(lData, iBase, iWidth, chFill, iPrecision);
 }
-
+/**
+ * @brief 
+ * @param strInt 
+ * @return 
+*/
 int StringUtils::str2Int(std::string strInt)
 {
     return transFomat<int>(strInt);
 }
-
+/**
+ * @brief 
+ * @param strDigit 
+ * @return 
+*/
 unsigned int StringUtils::str2Uint(std::string strDigit)
 {
     return transFomat<unsigned int>(strDigit);
 }
-
+/**
+ * @brief 
+ * @param strDigit 
+ * @return 
+*/
 long StringUtils::str2Long(std::string strDigit)
 {
     return transFomat<long>(strDigit);
 }
-
+/**
+ * @brief 
+ * @param strDigit 
+ * @return 
+*/
 unsigned long StringUtils::str2Ulong(std::string strDigit)
 {
     return transFomat<unsigned long>(strDigit);
 }
-
+/**
+ * @brief 
+ * @param strDigit 
+ * @return 
+*/
 long long StringUtils::str2LongLong(std::string strDigit)
 {
     return transFomat<long long>(strDigit);
 }
-
+/**
+ * @brief 
+ * @param strDigit 
+ * @return 
+*/
 unsigned long long StringUtils::str2ULongLong(std::string strDigit) 
 {
     return transFomat<unsigned long long>(strDigit);
 }
-
+/**
+ * @brief 
+ * @param strDigit 
+ * @return 
+*/
 double StringUtils::str2Double(std::string strDigit) 
 {
     return transFomat<double>(strDigit);
 }
-
+/**
+ * @brief 
+ * @param strDigit 
+ * @return 
+*/
 float StringUtils::str2Float(std::string strDigit)
 {
     return transFomat<float>(strDigit);
 }
-
+/**
+ * @brief 
+ * @param szByteData 
+ * @param uLen 
+ * @return 
+*/
 std::string StringUtils::toBase64(const char* szByteData, unsigned int uLen)
 {
     std::string ret = std::string();
@@ -383,12 +575,19 @@ std::string StringUtils::toBase64(const char* szByteData, unsigned int uLen)
 
     return ret;
 }
-
+/**
+ * @brief 
+ * @param c 
+ * @return 
+*/
 inline bool StringUtils::IsBase64(unsigned char c) {
     return (isalnum(c) || (c == '+') || (c == '/'));
 }
-
-
+/**
+ * @brief 
+ * @param strBase64 
+ * @return 
+*/
 std::string StringUtils::fromBase64(const std::string& strBase64)
 {
     if (strBase64.empty())
@@ -434,7 +633,12 @@ std::string StringUtils::fromBase64(const std::string& strBase64)
 
     return ret;
 }
-
+/**
+ * @brief 
+ * @param strFormat 
+ * @param theTime 
+ * @return 
+*/
 std::string StringUtils::time2String(const std::string strFormat, const time_t theTime)
 {
     if (strFormat.empty())
@@ -455,7 +659,12 @@ std::string StringUtils::time2String(const std::string strFormat, const time_t t
     os << std::put_time(&timeinfo, strFormat.c_str());
     return os.str();
 }
-
+/**
+ * @brief 
+ * @param strFormat 
+ * @param strTimer 
+ * @return 
+*/
 time_t StringUtils::string2Timer(const std::string strFormat, const std::string strTimer)
 {
     struct tm timeinfo = { 0 };
@@ -467,8 +676,11 @@ time_t StringUtils::string2Timer(const std::string strFormat, const std::string 
         return -1;
     return mktime(&timeinfo);
 }
-
-
+/**
+ * @brief 
+ * @param str 
+ * @return 
+*/
 std::wstring StringUtils::UTF8ToUnicode(const std::string str)
 {
     std::wstring ret;
@@ -481,7 +693,11 @@ std::wstring StringUtils::UTF8ToUnicode(const std::string str)
     }
     return ret;
 }
-
+/**
+ * @brief 
+ * @param wstr 
+ * @return 
+*/
 std::string StringUtils::UnicodeToUTF8(const std::wstring wstr)
 {
     std::string ret;
@@ -494,7 +710,11 @@ std::string StringUtils::UnicodeToUTF8(const std::wstring wstr)
     }
     return ret;
 }
-
+/**
+ * @brief 
+ * @param wstr 
+ * @return 
+*/
 std::string StringUtils::UnicodeToANSI(const std::wstring& wstr)
 {
     std::string ret;
@@ -526,7 +746,11 @@ std::string StringUtils::UnicodeToANSI(const std::wstring& wstr)
 #endif    
     return ret;
 }
-
+/**
+ * @brief 
+ * @param str 
+ * @return 
+*/
 std::wstring StringUtils::ANSIToUnicode(const std::string& str)
 {
     std::wstring ret;
@@ -547,17 +771,28 @@ std::wstring StringUtils::ANSIToUnicode(const std::string& str)
 #endif
     return ret;
 }
-
+/**
+ * @brief 
+ * @param str 
+ * @return 
+*/
 std::string StringUtils::UTF8ToANSI(const std::string& str)
 {
     return UnicodeToANSI(UTF8ToUnicode(str));
 }
-
+/**
+ * @brief 
+ * @param str 
+ * @return 
+*/
 std::string StringUtils::ANSIToUTF8(const std::string& str)
 {
     return UnicodeToUTF8(ANSIToUnicode(str));
 }
-
+/**
+ * @brief 
+ * @return 
+*/
 std::string StringUtils::generateUUID() 
 {
     std::random_device rd;
@@ -570,5 +805,5 @@ std::string StringUtils::generateUUID()
     std::ostringstream oss;
     oss << /*std::uppercase <<*/ std::hex << part1 << part2;
     std::string strResult = str2UUIDFomat(std::move(oss.str()));
-    return strResult.substr(0, 36); // ��ȡ36λ��Ϊ�򻯵�UUID,������"-"�ָ��
+    return strResult.substr(0, 36); 
 }

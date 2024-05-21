@@ -35,7 +35,13 @@ static const std::map<std::string, std::function<R(T, T)>>  g_mapOperateFun = {
 	{"*",			[](T leftNum, T rightNum)->R { return (R)(leftNum * rightNum); } },
 	{"/",           [](T leftNum, T rightNum)->R { return (R)(leftNum / rightNum); } }
 };
-
+/**
+ * @brief 
+ * @param type1 
+ * @param type2 
+ * @param bDouble 
+ * @return 
+*/
 static bool OnIsSameType(std::type_index type1, std::type_index type2,bool bDouble = false)
 {
 	if (type1 == type2)
@@ -56,7 +62,12 @@ static bool OnIsSameType(std::type_index type1, std::type_index type2,bool bDoub
 	}
 	return false;
 }
-
+/**
+ * @brief 
+ * @param strData 
+ * @param uData 
+ * @return 
+*/
 static inline bool str2Number(std::string strData, uint64_t& uData)
 {
 	bool fRet = false;
@@ -68,7 +79,14 @@ static inline bool str2Number(std::string strData, uint64_t& uData)
 		return false;
 	return true;
 }
-
+/**
+ * @brief 
+ * @param typeIndex 
+ * @param uValue 
+ * @param strValue 
+ * @param uDefalt 
+ * @return 
+*/
 static inline uint64_t OnGetValue(std::type_index typeIndex, uint64_t uValue,
 	std::string strValue, uint64_t uDefalt)
 {
@@ -82,8 +100,12 @@ static inline uint64_t OnGetValue(std::type_index typeIndex, uint64_t uValue,
 	}
 	return uDefalt;
 }
-
-
+/**
+ * @brief 
+ * @param strData 
+ * @param dData 
+ * @return 
+*/
 static inline bool str2Real(std::string strData, double& dData)
 {
 	bool fRet = false;
@@ -145,7 +167,11 @@ Value::Value(double uValue) : m_objValue(), m_typeId(REAL_TYPE), m_strValue()
 Value::~Value()
 {
 }
-
+/**
+ * @brief 
+ * @param uDefalt 
+ * @return 
+*/
 std::string Value::getValue(std::string uDefalt)
 {
 	if (m_typeId == STRING_TYPE && !m_strValue.empty())
@@ -156,36 +182,65 @@ std::string Value::getValue(std::string uDefalt)
 		return std::to_string(this->m_objValue.dValue);
 	return std::move(uDefalt);
 }
-
+/**
+ * @brief 
+ * @param szDefalt 
+ * @return 
+*/
 std::string Value::getValue(char* szDefalt)
 {
 	return getValue(std::string(szDefalt));
 }
-
+/**
+ * @brief 
+ * @param szDefalt 
+ * @return 
+*/
 std::string Value::getValue(const char* szDefalt)
 {
 	return getValue(std::string(szDefalt));
 }
-
+/**
+ * @brief 
+ * @param uDefalt 
+ * @return 
+*/
 uint64_t Value::getValue(uint64_t uDefalt) 
 {
 	return OnGetValue(m_typeId, m_objValue.uValue64, m_strValue, uDefalt);
 }
-
+/**
+ * @brief 
+ * @param uDefalt 
+ * @return 
+*/
 int64_t Value::getValue(int64_t uDefalt)
 {
 	return (int64_t)OnGetValue(m_typeId, (uint64_t)m_objValue.iValue64, m_strValue, (uint64_t)uDefalt);
 }
-
+/**
+ * @brief 
+ * @param uDefalt 
+ * @return 
+*/
 uint32_t Value::getValue(uint32_t uDefalt)
 {
 	return (uint32_t)OnGetValue(m_typeId, (uint64_t)m_objValue.uValue32, m_strValue, (uint64_t)uDefalt);
 }
-
+/**
+ * @brief 
+ * @param uDefalt 
+ * @return 
+*/
 int Value::getValue(int uDefalt)
 {
 	return (int)OnGetValue(m_typeId, (uint64_t)m_objValue.iValue, m_strValue, (uint64_t)uDefalt);;
 }
+/**
+ * @brief 
+ * @param uDefalt 
+ * @return 
+*/
 bool Value::getValue(bool uDefalt)
 {
 	if (m_typeId == BOOL_TYPE)
@@ -194,6 +249,11 @@ bool Value::getValue(bool uDefalt)
 		return m_objValue.bValue;
 	return uDefalt;
 }
+/**
+ * @brief 
+ * @param uDefalt 
+ * @return 
+*/
 double Value::getValue(double uDefalt)
 {
 	if (m_typeId == REAL_TYPE)
@@ -208,7 +268,11 @@ double Value::getValue(double uDefalt)
 	}
 	return uDefalt;
 }
-
+/**
+ * @brief 
+ * @param value 
+ * @return 
+*/
 Value& Value::operator=(Value value)
 {
 	m_typeId = std::move(value.m_typeId);
@@ -224,66 +288,111 @@ Value& Value::operator=(Value value)
 	}
 	return *this;
 }
-
+/**
+ * @brief 
+ * @param strValue 
+ * @return 
+*/
 Value& Value::operator=(std::string strValue)
 {
 	*this = Value(strValue);
 	return *this;
 }
-
+/**
+ * @brief 
+ * @param szValue 
+ * @return 
+*/
 Value& Value::operator=(char* szValue)
 {
 	*this = Value(szValue);
 	return *this;
 }
-
+/**
+ * @brief 
+ * @param szValue 
+ * @return 
+*/
 Value& Value::operator=(const char* szValue)
 {
 	*this = Value(szValue);
 	return *this;
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 Value& Value::operator=(uint64_t uValue)
 {
 	*this = Value(uValue);
 	return *this;
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 Value& Value::operator=(int64_t uValue)
 {
 	*this = Value(uValue);
 	return *this;
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 Value& Value::operator=(uint32_t uValue)
 {
 	*this = Value(uValue);
 	return *this;
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value& Value::operator=(int iValue)
 {
 	*this = Value(iValue);
 	return *this;
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 Value& Value::operator=(bool uValue)
 {
 	*this = Value(uValue);
 	return *this;
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 Value& Value::operator=(double uValue)
 {
 	*this = Value(uValue);
 	return *this;
 }
-
+/**
+ * @brief 
+ * @param valueParam 
+ * @return 
+*/
 bool Value::operator==(const Value valueParam)
 {
 	return cmpValueFun(valueParam, "==");;
 }
-
+/**
+ * @brief 
+ * @param valueParam 
+ * @param strOpr 
+ * @return 
+*/
 bool Value::cmpValueFun(const Value& valueParam, std::string strOpr)
 {
 	if (OnIsSameType(m_typeId, valueParam.m_typeId))
@@ -318,72 +427,128 @@ bool Value::cmpValueFun(const Value& valueParam, std::string strOpr)
 	}
 	return false;
 }
-
+/**
+ * @brief 
+ * @param strValue 
+ * @return 
+*/
 bool Value::operator==(const std::string strValue)
 {
 	return *this == Value(strValue);
 }
-
+/**
+ * @brief 
+ * @param szValue 
+ * @return 
+*/
 bool Value::operator==(char* szValue)
 {
 	return *this == Value(szValue);
 }
-
+/**
+ * @brief 
+ * @param szValue 
+ * @return 
+*/
 bool Value::operator==(const char* szValue)
 {
 	return *this == Value(szValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator==(const uint64_t uValue)
 {
 	return *this == Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator==(const int64_t uValue)
 {
 	return *this == Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator==(const uint32_t uValue)
 {
 	return *this == Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator==(const int uValue)
 {
 	return *this == Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator==(const bool uValue)
 {
 	return *this == Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator==(const double uValue)
 {
 	return *this == Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param valueParam 
+ * @return 
+*/
 bool Value::operator!=(const Value valueParam)
 {
 	return !(*this == valueParam);
 }
-
+/**
+ * @brief 
+ * @param strValue 
+ * @return 
+*/
 bool Value::operator!=(const std::string strValue)
 {
 	return *this != Value(strValue);
 }
-
+/**
+ * @brief 
+ * @param szValue 
+ * @return 
+*/
 bool Value::operator!=(char* szValue)
 {
 	return *this != Value(szValue);
 }
-
+/**
+ * @brief 
+ * @param szValue 
+ * @return 
+*/
 bool Value::operator!=(const char* szValue)
 {
 	return *this != Value(szValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator!=(const uint64_t uValue)
 {
 	return *this != Value(uValue);
@@ -393,97 +558,173 @@ bool Value::operator!=(const int64_t iValue)
 {
 	return *this != Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator!=(const uint32_t uValue)
 {
 	return *this != Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator!=(const int uValue)
 {
 	return *this != Value(uValue);
 }
-
+/**
+ * @brief
+ * @param uValue
+ * @return
+*/
 bool Value::operator!=(const bool bValue)
 {
 	return *this != Value(bValue);
 }
-
+/**
+ * @brief
+ * @param dValue
+ * @return
+*/
 bool Value::operator!=(const double dValue)
 {
 	return *this != Value(dValue);
 }
-
+/**
+ * @brief 
+ * @param valueParam 
+ * @return 
+*/
 bool Value::operator<(const Value valueParam)
 {
 	return cmpValueFun(valueParam, "<");
 }
-
+/**
+ * @brief 
+ * @param strValue 
+ * @return 
+*/
 bool Value::operator<(const std::string strValue)
 {
 	return *this < Value(strValue);
 }
-
+/**
+ * @brief 
+ * @param szValue 
+ * @return 
+*/
 bool Value::operator<(char* szValue)
 {
 	return *this < Value(szValue);
 }
-
+/**
+ * @brief 
+ * @param szValue 
+ * @return 
+*/
 bool Value::operator<(const char* szValue)
 {
 	return *this < Value(szValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator<(const uint64_t uValue)
 {
 	return *this < Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator<(const int64_t uValue)
 {
 	return *this < Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator<(const uint32_t uValue)
 {
 	return *this < Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator<(const int uValue)
 {
 	return *this < Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator<(const double uValue)
 {
 	return *this < Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param valueParam 
+ * @return 
+*/
 bool Value::operator<=(const Value valueParam)
 {
 	return cmpValueFun(valueParam, "<=");
 }
-
+/**
+ * @brief 
+ * @param strValue 
+ * @return 
+*/
 bool Value::operator<=(const std::string strValue)
 {
 	return *this <= Value(strValue);
 }
-
+/**
+ * @brief 
+ * @param szValue 
+ * @return 
+*/
 bool Value::operator<=(char* szValue)
 {
 	return *this <= Value(szValue);
 }
-
+/**
+ * @brief 
+ * @param szValue 
+ * @return 
+*/
 bool Value::operator<=(const char* szValue)
 {
 	return *this <= Value(szValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator<=(const uint64_t uValue)
 {
 	return *this <= Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator<=(const int64_t uValue)
 {
 	return *this <= Value(uValue);
@@ -493,108 +734,192 @@ bool Value::operator<=(const uint32_t uValue)
 {
 	return *this <= Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator<=(const int uValue)
 {
 	return *this <= Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator<=(const double uValue)
 {
 	return *this <= Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param valueParam 
+ * @return 
+*/
 bool Value::operator>(const Value valueParam)
 {
 	return cmpValueFun(valueParam, ">");
 }
-
+/**
+ * @brief 
+ * @param strValue 
+ * @return 
+*/
 bool Value::operator>(const std::string strValue)
 {
 	return *this > Value(strValue);
 }
-
+/**
+ * @brief 
+ * @param szValue 
+ * @return 
+*/
 bool Value::operator>(char* szValue)
 {
 	return *this > Value(szValue);
 }
-
+/**
+ * @brief 
+ * @param szValue 
+ * @return 
+*/
 bool Value::operator>(const char* szValue)
 {
 	return *this > Value(szValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator>(const uint64_t uValue)
 {
 	return *this > Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator>(const int64_t uValue)
 {
 	return *this > Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator>(const uint32_t uValue)
 {
 	return *this > Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator>(const int uValue)
 {
 	return *this > Value(uValue);
 }
-
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator>(const double uValue)
 {
 	return *this > Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param valueParam 
+ * @return 
+*/
 bool Value::operator>=(const Value& valueParam)
 {
 	return cmpValueFun(valueParam, ">=");
 }
-
+/**
+ * @brief 
+ * @param strValue 
+ * @return 
+*/
 bool Value::operator>=(const std::string strValue)
 {
 	return *this >= Value(strValue);
 }
-
+/**
+ * @brief 
+ * @param szValue 
+ * @return 
+*/
 bool Value::operator>=(char* szValue)
 {
 	return *this >= Value(szValue);
 }
-
+/**
+ * @brief 
+ * @param szValue 
+ * @return 
+*/
 bool Value::operator>=(const char* szValue)
 {
 	return *this >= Value(szValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator>=(const uint64_t uValue)
 {
 	return *this >= Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator>=(const int64_t uValue)
 {
 	return *this >= Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator>=(const uint32_t uValue)
 {
 	return *this >= Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator>=(const int uValue)
 {
 	return *this >= Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 bool Value::operator>=(const double uValue)
 {
 	return *this >= Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param vParam 
+ * @param strOpr 
+ * @return 
+*/
 Value Value::calcValueFun(const Value& vParam, std::string strOpr)
 {
 	Value vTempRet;
@@ -631,268 +956,476 @@ Value Value::calcValueFun(const Value& vParam, std::string strOpr)
 	}
 	return vTempRet;
 }
-
+/**
+ * @brief 
+ * @param vParam 
+ * @return 
+*/
 Value Value::operator+(Value vParam)
 {
 	return calcValueFun(vParam, "+");
 }
-
+/**
+ * @brief 
+ * @param strValue 
+ * @return 
+*/
 Value Value::operator+(std::string strValue)
 {
 	return calcValueFun(Value(strValue), "+");
 }
-
+/**
+ * @brief 
+ * @param szValue 
+ * @return 
+*/
 Value Value::operator+(char* szValue) 
 {
 	return  *this + Value(szValue);
 }
-
+/**
+ * @brief 
+ * @param szValue 
+ * @return 
+*/
 Value Value::operator+(const char* szValue) 
 {
 	return *this + Value(szValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 Value Value::operator+(uint64_t uValue) 
 {
 	return  *this + Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator+(int64_t iValue) 
 {
 	return  *this + Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator+(uint32_t iValue)
 {
 	return  *this + Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator+(int iValue)
 {
 	return  *this + Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator+(double iValue)
 {
 	return  *this + Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param vParam 
+ * @return 
+*/
 Value Value::operator+=(Value vParam)
 {
 	*this = calcValueFun(vParam, "+");
 	return *this;
 }
-
+/**
+ * @brief 
+ * @param strValue 
+ * @return 
+*/
 Value Value::operator+=(std::string strValue)
 {
 	return  *this += Value(strValue);
 }
-
+/**
+ * @brief 
+ * @param szValue 
+ * @return 
+*/
 Value Value::operator+=(char* szValue)
 {
 	return  *this += Value(szValue);
 }
-
+/**
+ * @brief 
+ * @param szValue 
+ * @return 
+*/
 Value Value::operator+=(const char* szValue)
 {
 	return  *this += Value(szValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 Value Value::operator+=(uint64_t uValue)
 {
 	return  *this += Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 Value Value::operator+=(int64_t uValue)
 {
 	return  *this += Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 Value Value::operator+=(uint32_t uValue)
 {
 	return  *this += Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 Value Value::operator+=(int uValue)
 {
 	return  *this += Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param uValue 
+ * @return 
+*/
 Value Value::operator+=(double uValue)
 {
 	return  *this += Value(uValue);
 }
-
+/**
+ * @brief 
+ * @param vParam 
+ * @return 
+*/
 Value Value::operator-(Value vParam)
 {
 	return calcValueFun(vParam, "-");
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator-(uint64_t iValue)
 {
 	return  *this - Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator-(int64_t iValue)
 {
 	return  *this - Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator-(uint32_t iValue)
 {
 	return  *this - Value(iValue);
 }
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator-(int iValue)
 {
 	return  *this - Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator-(double iValue)
 {
 	return  *this - Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param vParam 
+ * @return 
+*/
 Value Value::operator-=(Value vParam)
 {
 	*this = calcValueFun(vParam, "-");
 	return *this;
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator-=(uint64_t iValue)
 {
 	return  *this -= Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator-=(int64_t iValue)
 {
 	return  *this -= Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator-=(uint32_t iValue)
 {
 	return  *this -= Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator-=(int iValue)
 {
 	return  *this -= Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator-=(double iValue)
 {
 	return  *this -= Value(iValue);
 }
-
-
+/**
+ * @brief 
+ * @param vParam 
+ * @return 
+*/
 Value Value::operator*(Value vParam)
 {
 	return calcValueFun(vParam, "*");
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator*(uint64_t iValue)
 {
 	return  *this * Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator*(int64_t iValue)
 {
 	return  *this * Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator*(uint32_t iValue)
 {
 	return  *this * Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator*(int iValue)
 {
 	return  *this * Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator*(double iValue)
 {
 	return  *this * Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param vParam 
+ * @return 
+*/
 Value Value::operator*=(Value vParam)
 {
 	Value valueRet = calcValueFun(vParam, "*");
 	*this = valueRet;
 	return *this;
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator*=(uint64_t iValue)
 {
 	return  *this *= Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator*=(int64_t iValue)
 {
 	return  *this *= Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator*=(uint32_t iValue)
 {
 	return  *this *= Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator*=(int iValue)
 {
 	return  *this *= Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator*=(double iValue)
 {
 	return  *this *= Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param vParam 
+ * @return 
+*/
 Value Value::operator/(Value vParam)
 {
 	return  calcValueFun(vParam, "/");
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator/(uint64_t iValue)
 {
 	return  *this / Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator/(int64_t iValue)
 {
 	return  *this / Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator/(uint32_t iValue)
 {
 	return  *this / Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator/(int iValue)
 {
 	return  *this / Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator/(double iValue)
 {
 	return  *this / Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param vParam 
+ * @return 
+*/
 Value Value::operator/=(Value vParam)
 {
 	*this = calcValueFun(vParam, "/");;
 	return *this;
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator/=(uint64_t iValue)
 {
 
 	return  *this /= Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator/=(int64_t iValue)
 {
 	return  *this /= Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator/=(uint32_t iValue)
 {
 	return  *this /= Value(iValue);
@@ -902,12 +1435,19 @@ Value Value::operator/=(int iValue)
 {
 	return  *this /= Value(iValue);
 }
-
+/**
+ * @brief 
+ * @param iValue 
+ * @return 
+*/
 Value Value::operator/=(double iValue)
 {
 	return  *this /= Value(iValue);
 }
-
+/**
+ * @brief 
+ * @return 
+*/
 Value_Type Value::getType()
 {
 	if (m_typeId == REAL_TYPE)

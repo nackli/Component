@@ -10,15 +10,23 @@ Copyright (c) 2024. All Rights Reserved.
 #ifndef WIN32
 #include <cxxabi.h>
 #endif
+/**
+ * @brief 
+*/
 ObjectClass::ObjectClass() :m_strObjectName()
 {
 
 }
-
+/**
+ * @brief 
+*/
 ObjectClass::~ObjectClass() 
 {
 }
-
+/**
+ * @brief 
+ * @return 
+*/
 std::string ObjectClass::getClassType()
 {
 #ifndef WIN32
@@ -33,24 +41,38 @@ std::string ObjectClass::getClassType()
     return StringUtils::getTypeName2WithDot(typeid(*this).name());
 #endif
 }
-
+/**
+ * @brief 
+ * @param strObjectName 
+ * @return 
+*/
 bool ObjectClass::setObjectName(const std::string strObjectName)
 {
     m_strObjectName = strObjectName;
     return true;
 }
-
+/**
+ * @brief 
+ * @return 
+*/
 std::string ObjectClass::getObjectName()
 {
     return m_strObjectName;
 }
-
+/**
+ * @brief 
+ * @param strObjectId 
+ * @return 
+*/
 bool ObjectClass::setObjectId(const std::string strObjectId)
 {
     m_strObjectId = strObjectId;
     return true;
 }
-
+/**
+ * @brief 
+ * @return 
+*/
 std::string ObjectClass::getObjectId()
 {
     return m_strObjectId;

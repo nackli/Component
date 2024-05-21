@@ -47,7 +47,12 @@ static inline std::unique_ptr<T_To> DynamicUniqueCast(std::unique_ptr<T_From> ob
 {
     return std::unique_ptr<T_To>{dynamic_cast<T_To*>(obj.get()) ? dynamic_cast<T_To*>(obj.release()) : nullptr};
 }
-
+/**
+ * @brief 
+ * @param nodeClasses 
+ * @param strValue 
+ * @return 
+*/
 static inline bool OnGetNodeValue(YAML::Node nodeClasses, std::string& strValue)
 {
     if (nodeClasses.IsNull() || !nodeClasses.IsScalar())
@@ -55,7 +60,12 @@ static inline bool OnGetNodeValue(YAML::Node nodeClasses, std::string& strValue)
     strValue = nodeClasses.Scalar();
     return true;
 }
-
+/**
+ * @brief 
+ * @param nodeClasses 
+ * @param iValue 
+ * @return 
+*/
 static inline bool OnGetNodeValue(YAML::Node nodeClasses, int& iValue)
 {
     if (nodeClasses.IsNull() || !nodeClasses.IsScalar())
@@ -63,7 +73,12 @@ static inline bool OnGetNodeValue(YAML::Node nodeClasses, int& iValue)
     iValue = nodeClasses.as<int>();
     return true;
 }
-
+/**
+ * @brief 
+ * @param nodeItem 
+ * @param mapProperty 
+ * @return 
+*/
 static inline bool OnGetNodeValue(YAML::Node nodeItem, Properties::MapStr2Value& mapProperty)
 {
     if (nodeItem.IsNull() || !nodeItem.IsMap())
@@ -75,7 +90,11 @@ static inline bool OnGetNodeValue(YAML::Node nodeItem, Properties::MapStr2Value&
     }
     return true;
 }
-
+/**
+ * @brief 
+ * @param nodeClasses 
+ * @return 
+*/
 static inline bool parseClassConfig(YAML::Node& nodeClasses)
 {
     if (nodeClasses.IsNull() || !nodeClasses.IsSequence())
@@ -126,7 +145,11 @@ YamlStructCpp::YamlStructCpp()
 YamlStructCpp::~YamlStructCpp()
 {
 }
-
+/**
+ * @brief 
+ * @param strFilePath 
+ * @return 
+*/
 bool YamlStructCpp::loadYamlData(const std::string strFilePath)
 {
 	if (strFilePath.empty())
