@@ -81,13 +81,16 @@ use_bundled_yamlcpp(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 if(MSVC)
   set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "CompentDev")
 endif()
+
 # add sub project
  add_subdirectory(ComponentCore)
 if(ENABLE_TEST)
   add_subdirectory(ComDllTest)
   add_subdirectory(TestDll)
   add_subdirectory(ComponentDev)
+  add_dependencies(CompentDev ComDllTest TestDll)
 endif()
+
 
 
 # 指定安装规则
