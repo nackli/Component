@@ -4,13 +4,13 @@
 #include <memory>
 #include <mutex>
 #include "ObjectFactory.h"
-class ObjectClass;
+class ObjectBase;
 class ClassManage
 {
 public:
 	static ClassManage& getDefaultClassManage();
 
-	std::shared_ptr<ObjectClass> createObjectClass(std::string strClassName);
+	std::shared_ptr<ObjectBase> createObjectClass(std::string strClassName);
 
 	void registerClass(const std::string strClassName, std::unique_ptr<ObjectFactory> objFactory);
 
@@ -18,9 +18,9 @@ public:
 
 	void unregisterClass(const std::string strClassName);
 
-	bool insertClass(std::shared_ptr<ObjectClass>);
+	bool insertClass(std::shared_ptr<ObjectBase>);
 
-	std::shared_ptr<ObjectClass> GetObjectPrtFromLoadClass(const std::string strLable);
+	std::shared_ptr<ObjectBase> GetObjectPrtFromLoadClass(const std::string strLable);
 
 	bool initClassInfo();
 private:
@@ -30,7 +30,7 @@ private:
 	ClassManage& operator=(const ClassManage&) = delete;;
 protected:
 	std::map<std::string, std::unique_ptr<ObjectFactory>> m_mapClassManage;
-	std::map<std::string, std::shared_ptr<ObjectClass>> m_mapClassLoad;
+	std::map<std::string, std::shared_ptr<ObjectBase>> m_mapClassLoad;
 	mutable std::mutex m_mutexUnternal;
 
 };

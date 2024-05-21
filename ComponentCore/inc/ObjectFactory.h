@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <memory>
-class ObjectClass;
+class ObjectBase;
 class ObjectFactory {
 public:
     ObjectFactory() {};
@@ -12,12 +12,12 @@ public:
     virtual ~ObjectFactory() = default;
 
 
-    virtual std::shared_ptr<ObjectClass> createObject()
+    virtual std::shared_ptr<ObjectBase> createObject()
     {
         return nullptr;
     }
 };
-template <class T = ObjectClass>
+template <class T = ObjectBase>
 class ObjectFactoryDef :public ObjectFactory {
 public:
     ObjectFactoryDef() {};
@@ -28,7 +28,7 @@ public:
     virtual ~ObjectFactoryDef() = default;
 
 
-    virtual std::shared_ptr<ObjectClass> createObject() override
+    virtual std::shared_ptr<ObjectBase> createObject() override
     {
         return std::make_shared<T>();
     }

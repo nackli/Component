@@ -6,7 +6,7 @@ Copyright (c) 2024. All Rights Reserved.
 #include "ClassManage.h"
 #include "ObjectFactory.h"
 #include "StringUtils.h"
-#include "ObjectClass.h"
+#include "ObjectBase.h"
 
 /************************************************************************************************************************/
 template <typename T_To, typename T_From>
@@ -41,7 +41,7 @@ void ClassManage::registerClass(const std::string strClassName, std::unique_ptr<
  * @param strClassName 
  * @return 
 */
-std::shared_ptr<ObjectClass> ClassManage::createObjectClass(std::string strClassName)
+std::shared_ptr<ObjectBase> ClassManage::createObjectClass(std::string strClassName)
 {
     std::lock_guard<std::mutex> lock(m_mutexUnternal);
     if (strClassName.empty())
@@ -78,7 +78,7 @@ void ClassManage::unregisterClass()
  * @param objClass 
  * @return 
 */
-bool ClassManage::insertClass(std::shared_ptr<ObjectClass> objClass)
+bool ClassManage::insertClass(std::shared_ptr<ObjectBase> objClass)
 {
     if (objClass)
     {
@@ -95,7 +95,7 @@ bool ClassManage::insertClass(std::shared_ptr<ObjectClass> objClass)
  * @param strLable 
  * @return 
 */
-std::shared_ptr<ObjectClass> ClassManage::GetObjectPrtFromLoadClass(const std::string strLable)
+std::shared_ptr<ObjectBase> ClassManage::GetObjectPrtFromLoadClass(const std::string strLable)
 {
     if (strLable.empty() || m_mapClassLoad.empty())
         return nullptr;

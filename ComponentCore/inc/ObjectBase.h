@@ -2,11 +2,11 @@
 #include <string>
 #include <memory>
 //class Properties;
-class ObjectClass {
+class ObjectBase {
 public:
-	ObjectClass();
+	ObjectBase();
 
-	virtual	~ObjectClass();
+	virtual	~ObjectBase();
 
 	virtual bool initObject() = 0;
 

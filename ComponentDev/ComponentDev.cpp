@@ -22,7 +22,7 @@
 #include "ClassManage.h"
 #include "StringUtils.h"
 #include "YamlStructCpp.h"
-#include "ObjectClass.h"
+#include "ObjectBase.h"
 #include "Value.h"
 #include <string>
 

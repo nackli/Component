@@ -3,7 +3,7 @@ Written by Nack li <nackli@163.com>
 Copyright (c) 2024. All Rights Reserved.
 */
 
-#include "ObjectClass.h"
+#include "ObjectBase.h"
 #include <typeinfo>
 #include "StringUtils.h"
 #include "Properties.h"
@@ -13,21 +13,21 @@ Copyright (c) 2024. All Rights Reserved.
 /**
  * @brief 
 */
-ObjectClass::ObjectClass() :m_strObjectName()
+ObjectBase::ObjectBase() :m_strObjectName(), m_strObjectId()
 {
 
 }
 /**
  * @brief 
 */
-ObjectClass::~ObjectClass() 
+ObjectBase::~ObjectBase()
 {
 }
 /**
  * @brief 
  * @return 
 */
-std::string ObjectClass::getClassType()
+std::string ObjectBase::getClassType()
 {
 #ifndef WIN32
     char* szDemangleName = abi::__cxa_demangle(typeid(*this).name(), NULL, NULL, NULL);
@@ -46,7 +46,7 @@ std::string ObjectClass::getClassType()
  * @param strObjectName 
  * @return 
 */
-bool ObjectClass::setObjectName(const std::string strObjectName)
+bool ObjectBase::setObjectName(const std::string strObjectName)
 {
     m_strObjectName = strObjectName;
     return true;
@@ -55,7 +55,7 @@ bool ObjectClass::setObjectName(const std::string strObjectName)
  * @brief 
  * @return 
 */
-std::string ObjectClass::getObjectName()
+std::string ObjectBase::getObjectName()
 {
     return m_strObjectName;
 }
@@ -64,7 +64,7 @@ std::string ObjectClass::getObjectName()
  * @param strObjectId 
  * @return 
 */
-bool ObjectClass::setObjectId(const std::string strObjectId)
+bool ObjectBase::setObjectId(const std::string strObjectId)
 {
     m_strObjectId = strObjectId;
     return true;
@@ -73,7 +73,7 @@ bool ObjectClass::setObjectId(const std::string strObjectId)
  * @brief 
  * @return 
 */
-std::string ObjectClass::getObjectId()
+std::string ObjectBase::getObjectId()
 {
     return m_strObjectId;
 }

@@ -1,9 +1,9 @@
 #pragma once
 #include <string>
 #include <memory>
-#include "ObjectClass.h"
+#include "ObjectBase.h"
 #include "Properties.h"
-class ClassAtom: public ObjectClass,public Properties
+class ClassAtom: public ObjectBase,public Properties
 {
 public:
 	ClassAtom();

@@ -13,7 +13,7 @@ Copyright (c) 2024. All Rights Reserved.
 /**
  * @brief 
 */
-ClassAtom::ClassAtom() :ObjectClass(), Properties()
+ClassAtom::ClassAtom() :ObjectBase(), Properties()
 {
 
 }
