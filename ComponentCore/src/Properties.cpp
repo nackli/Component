@@ -13,7 +13,8 @@ Properties::~Properties()
 
 bool Properties::addValue(const MapStr2Value& mapValue)
 {
-	m_mapCfgValue.clear();
+	if(!m_mapCfgValue.empty())
+		m_mapCfgValue.clear();
 	m_mapCfgValue = mapValue;
 	return true;
 }

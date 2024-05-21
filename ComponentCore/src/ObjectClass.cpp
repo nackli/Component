@@ -10,7 +10,7 @@ Copyright (c) 2024. All Rights Reserved.
 #ifndef WIN32
 #include <cxxabi.h>
 #endif
-ObjectClass::ObjectClass() :m_strObjectName(), m_pProp(NULL)
+ObjectClass::ObjectClass() :m_strObjectName()
 {
 
 }
@@ -45,12 +45,23 @@ std::string ObjectClass::getObjectName()
     return m_strObjectName;
 }
 
-void ObjectClass::addPropertiesPtr(std::shared_ptr<Properties> pProp)
+bool ObjectClass::setObjectId(const std::string strObjectId)
 {
-    m_pProp = pProp;
+    m_strObjectId = strObjectId;
+    return true;
 }
 
-std::shared_ptr<Properties> ObjectClass::getProperties()
+std::string ObjectClass::getObjectId()
 {
-    return m_pProp;
+    return m_strObjectId;
 }
+
+//void ObjectClass::addPropertiesPtr(std::shared_ptr<Properties> pProp)
+//{
+//    m_pProp = pProp;
+//}
+//
+//std::shared_ptr<Properties> ObjectClass::getProperties()
+//{
+//    return m_pProp;
+//}

@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <memory>
-class Properties;
+//class Properties;
 class ObjectClass {
 public:
 	ObjectClass();
@@ -16,11 +16,16 @@ public:
 
 	std::string getObjectName();
 
-	void addPropertiesPtr(std::shared_ptr<Properties> pProp);
+	bool setObjectId(const std::string strObjectId);
 
-	std::shared_ptr<Properties> getProperties();
+	std::string getObjectId();
+
+	//void addPropertiesPtr(std::shared_ptr<Properties> pProp);
+
+	//std::shared_ptr<Properties> getProperties();
 
 private:
 	std::string m_strObjectName;
-	std::shared_ptr<Properties> m_pProp;
+	std::string m_strObjectId;
+//	std::shared_ptr<Properties> m_pProp;
 };

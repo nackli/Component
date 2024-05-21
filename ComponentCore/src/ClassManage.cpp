@@ -75,12 +75,26 @@ bool ClassManage::insertClass(const std::string& strLable, const std::string &st
     std::shared_ptr<ObjectClass> objClass = ClassManage::getDefaultClassManage().createObjectClass(strClassName);
     if (objClass && (m_mapClassLoad.empty() || m_mapClassLoad.find(strLable) == m_mapClassLoad.end()))
     {
-        objClass->addPropertiesPtr(pProp);
+        //objClass->addPropertiesPtr(pProp);
         objClass->setObjectName(strObjName);
-        m_mapClassLoad.insert(std::make_pair(strLable, objClass));
-        fRet = true;
+        objClass->setObjectId(strLable);
+        auto mapInsert = m_mapClassLoad.insert(std::make_pair(strLable, objClass));
+        fRet = mapInsert.second;
     }
     return fRet;
+}
+
+bool ClassManage::insertClass(std::shared_ptr<ObjectClass> objClass)
+{
+    if (objClass)
+    {
+        std::string strObjId = objClass->getObjectId();
+        if (strObjId.empty())
+            return false;
+        auto mapInsert = m_mapClassLoad.insert(std::make_pair(strObjId, objClass));
+        return mapInsert.second;
+    }
+    return false;
 }
 
 std::shared_ptr<ObjectClass> ClassManage::GetObjectPrtFromLoadClass(const std::string strLable)
@@ -97,7 +111,7 @@ bool ClassManage::initClassInfo()
 {
     if (m_mapClassLoad.empty())
         return false;
-    for (auto it = m_mapClassLoad.begin(); it != m_mapClassLoad.end(); ++it)
+     for (auto it = m_mapClassLoad.begin(); it != m_mapClassLoad.end(); ++it)
         it->second->initObject();
     return true;
 }

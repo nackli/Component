@@ -21,6 +21,8 @@ public:
 
 	bool insertClass(const std::string&, const std::string&, const std::string&, std::shared_ptr<Properties>);
 
+	bool insertClass(std::shared_ptr<ObjectClass>);
+
 	std::shared_ptr<ObjectClass> GetObjectPrtFromLoadClass(const std::string strLable);
 
 	bool initClassInfo();

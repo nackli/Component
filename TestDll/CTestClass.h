@@ -1,6 +1,6 @@
 #pragma once
-#include "ObjectClass.h"
-class CTestClass :public ObjectClass
+#include "ClassAtom.h"
+class CTestClass :public ClassAtom
 {
 public:
 	CTestClass();

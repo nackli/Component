@@ -10,6 +10,8 @@ Copyright (c) 2024. All Rights Reserved.
 #include "ClassManage.h"
 #include "Value.h"
 #include "Properties.h"
+#include "ClassAtom.h"
+#include <memory>
 /****************************************************************************************************/
 struct SchemaLable
 {
@@ -77,12 +79,23 @@ static inline bool OnGetNodeValue(YAML::Node nodeItem, Properties::MapStr2Value&
 }
 
 static inline bool OnCreateClassObject(std::string &strClassName, std::string &strLabel,
-    std::string& strObjName, std::shared_ptr<Properties> pProp)
+    std::string& strObjName, Properties::MapStr2Value mapStr2Value)
 {
     if (strClassName.empty() || strLabel.empty())
         return false;
-    if(ClassManage::getDefaultClassManage().insertClass(strLabel, strClassName, strObjName, pProp))
-        return true;
+
+    std::shared_ptr<ClassAtom> objClass = std::dynamic_pointer_cast<ClassAtom>(
+        ClassManage::getDefaultClassManage().createObjectClass(strClassName));
+    if (objClass)
+    {
+        //objClass->addPropertiesPtr(pProp);
+        objClass->setObjectName(strObjName);
+        objClass->setObjectId(strLabel);
+        objClass->addValue(mapStr2Value);
+        if (ClassManage::getDefaultClassManage().insertClass(objClass))
+            return true;
+    }
+
     return false;
 }
 
@@ -100,9 +113,9 @@ static inline bool parseClassConfig(YAML::Node& nodeClasses)
         OnGetNodeValue(nodeClass[SchemaLable::getDefault().strObjectName], strObjectName);
         OnGetNodeValue(nodeClass[SchemaLable::getDefault().strClassName], strClass);
         OnGetNodeValue(nodeClass[SchemaLable::getDefault().strProperties], mapProperty);
-        std::shared_ptr<Properties> pProp = std::make_shared<Properties>();
-        pProp->addValue(mapProperty);
-        OnCreateClassObject(strClass, strId, strObjectName, pProp);       
+        //std::shared_ptr<Properties> pProp = std::make_shared<Properties>();
+        //pProp->addValue(mapProperty);
+        OnCreateClassObject(strClass, strId, strObjectName, mapProperty);
     }
 
     return ClassManage::getDefaultClassManage().initClassInfo();;

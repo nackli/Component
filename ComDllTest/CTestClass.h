@@ -1,8 +1,8 @@
 #pragma once
-#include "ObjectClass.h"
+#include "ClassAtom.h"
 namespace xg {
 	namespace nack {
-		class CTestClass :public ObjectClass
+		class CTestClass :public ClassAtom
 		{
 		public:
 			CTestClass();
