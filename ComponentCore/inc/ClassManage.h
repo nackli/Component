@@ -5,13 +5,12 @@
 #include <mutex>
 #include "ObjectFactory.h"
 class ObjectClass;
-class Properties;
 class ClassManage
 {
 public:
 	static ClassManage& getDefaultClassManage();
 
-	static std::shared_ptr<ObjectClass> createObjectClass(std::string strClassName);
+	std::shared_ptr<ObjectClass> createObjectClass(std::string strClassName);
 
 	void registerClass(const std::string strClassName, std::unique_ptr<ObjectFactory> objFactory);
 
@@ -19,15 +18,12 @@ public:
 
 	void unregisterClass(const std::string strClassName);
 
-	bool insertClass(const std::string&, const std::string&, const std::string&, std::shared_ptr<Properties>);
-
 	bool insertClass(std::shared_ptr<ObjectClass>);
 
 	std::shared_ptr<ObjectClass> GetObjectPrtFromLoadClass(const std::string strLable);
 
 	bool initClassInfo();
 private:
-	std::shared_ptr<ObjectClass> CreateObject(std::string strClassName);
 	ClassManage() {};
 	ClassManage(const ClassManage&) = delete;
 	ClassManage(const ClassManage&&) = delete;;

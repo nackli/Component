@@ -17,6 +17,7 @@ namespace xg {
 
 		bool CTestObj::initObject()
 		{
+			int i = sizeof(CTestObj);
 			std::string str = getClassType();
 			
  			std::cout << str << " " << this->getValue("Config File").getValue("") << std::endl;

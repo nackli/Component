@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include "ObjectFactory.h"
 #include "ClassManage.h"
 #include "StringUtils.h"
 #ifndef WIN32
@@ -9,7 +8,7 @@
 #endif
 template<typename Class>
 class StaticClassType {
-public:
+public: 
     StaticClassType()
     {
         std::string strClassName = getTypeName();

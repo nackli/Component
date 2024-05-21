@@ -1,3 +1,7 @@
+
+#Written by Nack li <nackli@163.com>
+#Copyright (c) 2024. All Rights Reserved.
+
 #version
 cmake_minimum_required(VERSION 3.16)
 # project name

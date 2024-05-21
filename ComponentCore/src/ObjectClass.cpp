@@ -55,13 +55,3 @@ std::string ObjectClass::getObjectId()
 {
     return m_strObjectId;
 }
-
-//void ObjectClass::addPropertiesPtr(std::shared_ptr<Properties> pProp)
-//{
-//    m_pProp = pProp;
-//}
-//
-//std::shared_ptr<Properties> ObjectClass::getProperties()
-//{
-//    return m_pProp;
-//}

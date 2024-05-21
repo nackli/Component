@@ -32,22 +32,15 @@ void ClassManage::registerClass(const std::string strClassName, std::unique_ptr<
     m_mapClassManage.insert(std::make_pair(strClass, std::move(objFactory)));
 }
 
-std::shared_ptr<ObjectClass> ClassManage::CreateObject(std::string strClassName)
+std::shared_ptr<ObjectClass> ClassManage::createObjectClass(std::string strClassName)
 {
     std::lock_guard<std::mutex> lock(m_mutexUnternal);
     if (strClassName.empty())
         return nullptr;
     std::string strClass = StringUtils::getTypeName2WithDot(strClassName);
-    if(m_mapClassManage.find(strClass) != m_mapClassManage.end())
+    if (m_mapClassManage.find(strClass) != m_mapClassManage.end())
         return m_mapClassManage[strClass]->createObject();
     return nullptr;
-}
-
-std::shared_ptr<ObjectClass> ClassManage::createObjectClass(std::string strClassName)
-{
-    if (strClassName.empty())
-        return nullptr;
-    return ClassManage::getDefaultClassManage().CreateObject(strClassName);
 }
 
 void ClassManage::unregisterClass(const std::string strClassName)
@@ -64,24 +57,7 @@ void ClassManage::unregisterClass()
 {
     std::lock_guard<std::mutex> lock(m_mutexUnternal);
     m_mapClassManage.clear();
-}
-
-bool ClassManage::insertClass(const std::string& strLable, const std::string &strClassName,
-    const std::string& strObjName, std::shared_ptr<Properties> pProp)
-{
-    bool fRet = false;
-    if (strLable.empty())
-        return fRet;
-    std::shared_ptr<ObjectClass> objClass = ClassManage::getDefaultClassManage().createObjectClass(strClassName);
-    if (objClass && (m_mapClassLoad.empty() || m_mapClassLoad.find(strLable) == m_mapClassLoad.end()))
-    {
-        //objClass->addPropertiesPtr(pProp);
-        objClass->setObjectName(strObjName);
-        objClass->setObjectId(strLable);
-        auto mapInsert = m_mapClassLoad.insert(std::make_pair(strLable, objClass));
-        fRet = mapInsert.second;
-    }
-    return fRet;
+    m_mapClassLoad.clear();
 }
 
 bool ClassManage::insertClass(std::shared_ptr<ObjectClass> objClass)

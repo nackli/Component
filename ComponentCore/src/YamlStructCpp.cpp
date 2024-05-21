@@ -70,33 +70,10 @@ static inline bool OnGetNodeValue(YAML::Node nodeItem, Properties::MapStr2Value&
         return false;
     for (auto item : nodeItem)
     {
-        //auto typeItem = nodeItem[item.first].Type();
         if (nodeItem[item.first].IsScalar())
             mapProperty.insert(std::make_pair(item.first.as<std::string>(), Value(item.second.as<std::string>())));
-        //std::cout << item.first << "=" << typeItem << std::endl;
     }
     return true;
-}
-
-static inline bool OnCreateClassObject(std::string &strClassName, std::string &strLabel,
-    std::string& strObjName, Properties::MapStr2Value mapStr2Value)
-{
-    if (strClassName.empty() || strLabel.empty())
-        return false;
-
-    std::shared_ptr<ClassAtom> objClass = std::dynamic_pointer_cast<ClassAtom>(
-        ClassManage::getDefaultClassManage().createObjectClass(strClassName));
-    if (objClass)
-    {
-        //objClass->addPropertiesPtr(pProp);
-        objClass->setObjectName(strObjName);
-        objClass->setObjectId(strLabel);
-        objClass->addValue(mapStr2Value);
-        if (ClassManage::getDefaultClassManage().insertClass(objClass))
-            return true;
-    }
-
-    return false;
 }
 
 static inline bool parseClassConfig(YAML::Node& nodeClasses)
@@ -105,19 +82,40 @@ static inline bool parseClassConfig(YAML::Node& nodeClasses)
         return false;
     for (const auto& nodeClass : nodeClasses)
     {
-        std::string strId;
         std::string strClass;
-        std::string strObjectName;
-        Properties::MapStr2Value mapProperty;
-        OnGetNodeValue(nodeClass[SchemaLable::getDefault().strObjectId], strId);
-        OnGetNodeValue(nodeClass[SchemaLable::getDefault().strObjectName], strObjectName);
-        OnGetNodeValue(nodeClass[SchemaLable::getDefault().strClassName], strClass);
-        OnGetNodeValue(nodeClass[SchemaLable::getDefault().strProperties], mapProperty);
-        //std::shared_ptr<Properties> pProp = std::make_shared<Properties>();
-        //pProp->addValue(mapProperty);
-        OnCreateClassObject(strClass, strId, strObjectName, mapProperty);
-    }
+        if (OnGetNodeValue(nodeClass[SchemaLable::getDefault().strClassName], strClass))
+        {
+            std::shared_ptr<ClassAtom> objClass = std::dynamic_pointer_cast <ClassAtom>(
+                ClassManage::getDefaultClassManage().createObjectClass(strClass));
+            if (!objClass)
+            {
+                std::cout << "memory alloc fail" << std::endl;
+                continue;
+            }
+   
+            std::string strId;
+            if (OnGetNodeValue(nodeClass[SchemaLable::getDefault().strObjectId], strId))
+                objClass->setObjectId(strId);
+            else
+            {
+                std::cout << "please set object id" << std::endl;
+                continue;
+            }
+               
 
+            std::string strObjectName;
+            if(OnGetNodeValue(nodeClass[SchemaLable::getDefault().strObjectName], strObjectName))
+                objClass->setObjectName(strObjectName);
+
+            Properties::MapStr2Value mapProperty;
+            if (OnGetNodeValue(nodeClass[SchemaLable::getDefault().strProperties], mapProperty))
+                objClass->addValue(mapProperty);
+
+            if (!ClassManage::getDefaultClassManage().insertClass(objClass))
+                std::cout << "insert data error" << std::endl;
+   
+        }
+    }
     return ClassManage::getDefaultClassManage().initClassInfo();;
 }
 /****************************************************************************************************/
@@ -141,14 +139,9 @@ bool YamlStructCpp::loadYamlData(const std::string strFilePath)
         std::cout << "read error!" << e.what() << std::endl;
         return false;
     }
-    //YAML::NodeType::value typeConfig = nodeConfigs.Type();
-    //YAML::NodeType::value typeProcess = nodeConfigs["Classes"].Type();
+
     YAML::Node  nodeClasses = nodeConfigs[SchemaLable::getDefault().strClasses];
-    //for (auto item : nodeConfigs)
-    //{
-    //    YAML::NodeType::value typeItem = nodeConfigs[item.first].Type();
-    //    std::cout << item.first << "=" << typeItem << std::endl;
-    //}
+
     parseClassConfig(nodeClasses);
     return true;
 }
