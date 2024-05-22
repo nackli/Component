@@ -12,13 +12,8 @@ endif()
 add_executable(CompentDev ${DEV_SOURCES})
 target_link_libraries(CompentDev ComponentCore)
 
-if(MSVC)
 add_custom_command(TARGET CompentDev POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/config.yml" "${CMAKE_CURRENT_BINARY_DIR}/config.yml")
-else()
-add_custom_command(TARGET CompentDev POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E cp ${CMAKE_CURRENT_SOURCE_DIR}/config.yml ${CMAKE_CURRENT_BINARY_DIR}/config.yml)
-endif()
 
 if(MSVC)
     set_target_properties(CompentDev PROPERTIES COMPILE_FLAGS "/EHsc")
