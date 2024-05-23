@@ -12,11 +12,24 @@ namespace xg {
 
 		}
 
+		static void WriteDataThread(void *lpData)
+		{
+			CTestClass* pTemp = (CTestClass*)lpData;
+			while (1)
+			{
+				int iTet = rand();
+				pTemp->writeData(Value("nihaozhongguo") + std::to_string(iTet));
+				_sleep(1000);
+			}
+		}
+
 		bool CTestClass::initObject()
 		{
 			std::string str = getClassType();
 			std::cout << str << std::endl;
-			this->writeData(Value("nihaozhongguo"));
+	
+			std::thread t(WriteDataThread, this);
+			t.detach();
 			return true;
 		}
 

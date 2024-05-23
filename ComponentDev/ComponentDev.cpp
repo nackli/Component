@@ -49,6 +49,10 @@ int main()
     YamlStructCpp yamlLoad;
     yamlLoad.loadYamlData("./config.yml");
 
+    while (1)
+    {
+        Sleep(10000);
+    }
     std::cout << "Hello World!\n";
 #ifdef WIN32    
     system("pause");

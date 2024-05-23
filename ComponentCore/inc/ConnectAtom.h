@@ -4,6 +4,7 @@
 #include "ObjectBase.h"
 #include <stack>
 #include "Value.h"
+#include <mutex>
 /**
  * connent class
 */
@@ -29,4 +30,5 @@ private:
 	std::shared_ptr<ObjectBase> m_pSrcPtr;
 	std::shared_ptr<ObjectBase> m_pDestPtr;
 	std::stack<Value> m_sData;
+	mutable std::mutex m_mutexUnternal;
 };

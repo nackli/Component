@@ -59,12 +59,16 @@ std::shared_ptr<ObjectBase>  ConnectAtom::getDestObject() const
 
 bool ConnectAtom::addData(Value& vData)
 {
+	std::lock_guard<std::mutex> lock(m_mutexUnternal);
 	m_sData.emplace(vData);
 	return true;
 }
 
 Value ConnectAtom::getData()
 {
+	std::lock_guard<std::mutex> lock(m_mutexUnternal);
+	if (m_sData.empty())
+		return Value();
 	Value vTemp = m_sData.top();
 	m_sData.pop();
 	return vTemp;
