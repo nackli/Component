@@ -14,4 +14,8 @@ Classes:
     Config File: C:/minifi-cpp/test.json
     Time Window Ms: 200
     Freq: 200      
-    
+Connects:
+- connectId: 77e44f30-a811-3aa6-0000-000000000123
+  connectName: GetModbusTCP/SetModbusTCP
+  objectSrcId: 44e88fd0-a833-3ee6-0000-000000000000
+  objectDestId: 66e99f30-a866-3aa6-0000-000000000000

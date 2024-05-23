@@ -1,14 +1,17 @@
 #pragma once
 #include <string>
 #include <memory>
-//class Properties;
 class ObjectBase {
 public:
+	enum CLASS_TYPE
+	{
+		TYPE_UNINIT,
+		TYPE_OUT,
+		TYPE_IN,
+	};
 	ObjectBase();
 
 	virtual	~ObjectBase();
-
-	virtual bool initObject() = 0;
 
 	virtual std::string getClassType();
 
@@ -20,12 +23,11 @@ public:
 
 	std::string getObjectId();
 
-	//void addPropertiesPtr(std::shared_ptr<Properties> pProp);
+	void setTypeClass(CLASS_TYPE typeClass) { m_emTypeClass = typeClass; }
 
-	//std::shared_ptr<Properties> getProperties();
-
+	CLASS_TYPE getTypeClass() { return m_emTypeClass; }
 private:
+	CLASS_TYPE m_emTypeClass;
 	std::string m_strObjectName;
 	std::string m_strObjectId;
-//	std::shared_ptr<Properties> m_pProp;
 };

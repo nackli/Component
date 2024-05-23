@@ -11,6 +11,8 @@ Copyright (c) 2024. All Rights Reserved.
 #include "Value.h"
 #include "Properties.h"
 #include "ClassAtom.h"
+#include "ConnectAtom.h"
+#include "ConnManage.h"
 #include <memory>
 /****************************************************************************************************/
 struct SchemaLable
@@ -25,6 +27,12 @@ struct SchemaLable
     Key strClassName;
     Key strProperties;
 
+    Key strConnects;
+    Key strConnId;
+    Key strConnName;
+    Key strSrcId;
+    Key strDestId;
+
     static SchemaLable getDefault();
 };
 
@@ -38,7 +46,14 @@ SchemaLable SchemaLable::getDefault()
     schemaLable.strObjectId = "objectId";
     schemaLable.strObjectName = "objectName";
     schemaLable.strClassName = "className";
+
     schemaLable.strProperties = "Properties";
+
+    schemaLable.strConnects = "Connects";
+    schemaLable.strConnId = "connectId";
+    schemaLable.strConnName = "connectName";
+    schemaLable.strSrcId = "objectSrcId";
+    schemaLable.strDestId = "objectDestId";
     return schemaLable;
 }
 /****************************************************************************************************/
@@ -121,7 +136,6 @@ static inline bool parseClassConfig(YAML::Node& nodeClasses)
                 continue;
             }
                
-
             std::string strObjectName;
             if(OnGetNodeValue(nodeClass[SchemaLable::getDefault().strObjectName], strObjectName))
                 objClass->setObjectName(strObjectName);
@@ -135,7 +149,46 @@ static inline bool parseClassConfig(YAML::Node& nodeClasses)
    
         }
     }
-    return ClassManage::getDefaultClassManage().initClassInfo();;
+    return true;
+}
+/**
+ * @brief 
+ * @param nodeConns 
+ * @return 
+*/
+static inline bool parseConnsConfig(YAML::Node& nodeConns)
+{
+    if (nodeConns.IsNull() || !nodeConns.IsSequence())
+        return false;
+    for (const auto& nodeConn : nodeConns)
+    {
+        std::string strId;
+        if (OnGetNodeValue(nodeConn[SchemaLable::getDefault().strConnId], strId))
+        {
+            std::string strName;
+            OnGetNodeValue(nodeConn[SchemaLable::getDefault().strConnName], strName);
+
+            std::shared_ptr<ConnectAtom> pConnAtom = std::make_shared<ConnectAtom>(strId, strName);
+
+            std::string strSrcId;
+            if (OnGetNodeValue(nodeConn[SchemaLable::getDefault().strSrcId], strSrcId))
+            {
+                std::shared_ptr<ObjectBase> objSrc = ClassManage::getDefaultClassManage().GetObjectPrtByClassId(strSrcId);
+                objSrc->setTypeClass(ObjectBase::TYPE_IN);
+                pConnAtom->setSrcObject(objSrc);
+            }
+          
+            std::string strDestId;
+            if (OnGetNodeValue(nodeConn[SchemaLable::getDefault().strDestId], strDestId))
+            {
+                std::shared_ptr<ObjectBase> objDest = ClassManage::getDefaultClassManage().GetObjectPrtByClassId(strDestId);
+                objDest->setTypeClass(ObjectBase::TYPE_OUT);
+                pConnAtom->setDestObject(objDest);
+            }
+            ConnManage::getDefaultConnManage().addConnsData(pConnAtom);
+        }
+    }
+    return true;
 }
 /****************************************************************************************************/
 YamlStructCpp::YamlStructCpp()
@@ -164,8 +217,12 @@ bool YamlStructCpp::loadYamlData(const std::string strFilePath)
     }
 
     YAML::Node  nodeClasses = nodeConfigs[SchemaLable::getDefault().strClasses];
+    YAML::Node  nodeConns = nodeConfigs[SchemaLable::getDefault().strConnects];
 
     parseClassConfig(nodeClasses);
-    return true;
+
+    parseConnsConfig(nodeConns);
+
+    return ClassManage::getDefaultClassManage().initClassInfo();
 }
 

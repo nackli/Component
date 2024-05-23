@@ -20,7 +20,7 @@ public:
 
 	bool insertClass(std::shared_ptr<ObjectBase>);
 
-	std::shared_ptr<ObjectBase> GetObjectPrtFromLoadClass(const std::string strLable);
+	std::shared_ptr<ObjectBase> GetObjectPrtByClassId(const std::string strId);
 
 	bool initClassInfo();
 private:

@@ -16,6 +16,7 @@ namespace xg {
 		{
 			std::string str = getClassType();
 			std::cout << str << std::endl;
+			this->writeData(Value("nihaozhongguo"));
 			return true;
 		}
 

@@ -6,7 +6,8 @@ Copyright (c) 2024. All Rights Reserved.
 #include "ClassManage.h"
 #include "ObjectFactory.h"
 #include "StringUtils.h"
-#include "ObjectBase.h"
+//#include "ObjectBase.h"
+#include "ClassAtom.h"
 
 /************************************************************************************************************************/
 template <typename T_To, typename T_From>
@@ -95,11 +96,11 @@ bool ClassManage::insertClass(std::shared_ptr<ObjectBase> objClass)
  * @param strLable 
  * @return 
 */
-std::shared_ptr<ObjectBase> ClassManage::GetObjectPrtFromLoadClass(const std::string strLable)
+std::shared_ptr<ObjectBase> ClassManage::GetObjectPrtByClassId(const std::string strId)
 {
-    if (strLable.empty() || m_mapClassLoad.empty())
+    if (strId.empty() || m_mapClassLoad.empty())
         return nullptr;
-    auto prtClass = m_mapClassLoad.find(strLable);
+    auto prtClass = m_mapClassLoad.find(strId);
     if(prtClass == m_mapClassLoad.end())
         return nullptr;
     return prtClass->second;
@@ -112,7 +113,11 @@ bool ClassManage::initClassInfo()
 {
     if (m_mapClassLoad.empty())
         return false;
-     for (auto it = m_mapClassLoad.begin(); it != m_mapClassLoad.end(); ++it)
-        it->second->initObject();
+    for (auto it = m_mapClassLoad.begin(); it != m_mapClassLoad.end(); ++it)
+    {
+        std::shared_ptr<ClassAtom> pTemp = std::static_pointer_cast<ClassAtom>(it->second);
+        if(pTemp)
+            pTemp->initClassAtom();
+     }
     return true;
 }

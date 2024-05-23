@@ -13,7 +13,7 @@ Copyright (c) 2024. All Rights Reserved.
 /**
  * @brief 
 */
-ObjectBase::ObjectBase() :m_strObjectName(), m_strObjectId()
+ObjectBase::ObjectBase() :m_strObjectName(), m_strObjectId(), m_emTypeClass(TYPE_UNINIT)
 {
 
 }

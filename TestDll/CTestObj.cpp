@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Properties.h"
 #include "ClassManage.h"
+#include "ConnManage.h"
 namespace xg {
 	namespace nanjing {
 		CTestObj::CTestObj()
@@ -19,10 +20,10 @@ namespace xg {
 		{
 			int i = sizeof(CTestObj);
 			std::string str = getClassType();
-			
+			std::string str1 = "";
  			std::cout << str << " " << this->getValue("Config File").getValue("") << std::endl;
-			//std::shared_ptr<ObjectClass>  objClass = ClassManage::getDefaultClassManage().GetObjectPrtFromLoadClass("66e99f30-a866-3aa6-0000-000000000000");
-			//std::cout << objClass->getProperties()->getValue("Config File").getValue("") << std::endl;
+			Value vData = this->readData();
+
 			return true;
 		}
 
